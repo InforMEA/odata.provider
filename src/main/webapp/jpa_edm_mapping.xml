@@ -188,6 +188,7 @@
 				<JPAAttributes>
 					<JPAAttribute name="id">id</JPAAttribute>
 					<JPAAttribute name="treaty">treaty</JPAAttribute>
+					<JPAAttribute name="treatyUUID">treatyUUID</JPAAttribute>
 					<JPAAttribute name="url">url</JPAAttribute>
 					<JPAAttribute name="start">start</JPAAttribute>
 					<JPAAttribute name="end">end</JPAAttribute>
@@ -247,6 +248,7 @@
 					<JPAAttribute name="status">status</JPAAttribute>
 					<JPAAttribute name="type">type</JPAAttribute>
 					<JPAAttribute name="treaty">treaty</JPAAttribute>
+					<JPAAttribute name="treatyUUID">treatyUUID</JPAAttribute>
 					<JPAAttribute name="published">published</JPAAttribute>
 					<JPAAttribute name="updated">updated</JPAAttribute>
 					<JPAAttribute name="meetingId">meetingId</JPAAttribute>
@@ -353,6 +355,7 @@
 					<JPAAttribute name="type">type</JPAAttribute>
 					<JPAAttribute name="country">country</JPAAttribute>
 					<JPAAttribute name="treaty">treaty</JPAAttribute>
+					<JPAAttribute name="treatyUUID">treatyUUID</JPAAttribute>
 					<JPAAttribute name="url">url</JPAAttribute>
 					<JPAAttribute name="latitude">latitude</JPAAttribute>
 					<JPAAttribute name="longitude">longitude</JPAAttribute>
@@ -379,6 +382,7 @@
 					<JPAAttribute name="id">id</JPAAttribute>
 					<JPAAttribute name="country">country</JPAAttribute>
 					<JPAAttribute name="treaty">treaty</JPAAttribute>
+					<JPAAttribute name="treatyUUID">treatyUUID</JPAAttribute>
 					<JPAAttribute name="url">url</JPAAttribute>
 					<JPAAttribute name="submission">submission</JPAAttribute>
 					<JPAAttribute name="updated">updated</JPAAttribute>
@@ -405,6 +409,7 @@
 					<JPAAttribute name="id">id</JPAAttribute>
 					<JPAAttribute name="country">country</JPAAttribute>
 					<JPAAttribute name="treaty">treaty</JPAAttribute>
+					<JPAAttribute name="treatyUUID">treatyUUID</JPAAttribute>
 					<JPAAttribute name="type">type</JPAAttribute>
 					<JPAAttribute name="url">url</JPAAttribute>
 					<JPAAttribute name="submission">submission</JPAAttribute>
@@ -454,6 +459,7 @@
 				<EDMEntitySet>treaty</EDMEntitySet>
 				<JPAAttributes>
 					<JPAAttribute name="treaty">value</JPAAttribute>
+					<JPAAttribute name="treatyUUID">treatyUUID</JPAAttribute>
 				</JPAAttributes>
 				<JPARelationships />
 			</JPAEntityType>

@@ -49,6 +49,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
   SELECT
     CAST(a.uuid AS CHAR) AS id,
     c.field_odata_identifier_value AS treaty,
+    treaty.uuid as treatyUUID,
     url.field_url_url AS url,
     d.event_calendar_date_value AS `start`,
     d.event_calendar_date_value2 AS `end`,
@@ -142,7 +143,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     t2.name AS `status`,
     field_decision_number_value AS number,
     c.field_odata_identifier_value AS treaty,
-    dp.field_sorting_date_value AS published,
+    treaty.uuid AS treatyUUID,
+    dp.field_decision_published_value AS published,
     n2.uuid AS meetingId,
     n2.title AS meetingTitle,
     urlm.field_url_url AS meetingUrl,
@@ -253,6 +255,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
   SELECT
     a.uuid AS id,
     c.field_odata_identifier_value AS treaty,
+    treaty.uuid AS treatyUUID,
     iso2.field_country_iso2_value AS country,
     sd.field_sorting_date_value AS submission,
     durl.field_document_url_url AS url,
@@ -307,6 +310,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
   SELECT
     a.uuid AS id,
     c.field_odata_identifier_value AS treaty,
+    treaty.uuid AS treatyUUID,
     iso2.field_country_iso2_value AS country,
     sd.field_sorting_date_value AS submission,
     durl.field_document_url_url AS url,
@@ -420,9 +424,11 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     CAST(CONCAT(a.id, '-', d.field_odata_identifier_value) AS CHAR) AS id,
     a.id AS contact_id,
     d.field_odata_identifier_value AS treaty
+    treaty.uuid AS treatyUUID
   FROM `informea_contacts` a
   INNER JOIN `informea_drupal`.field_data_field_treaty c ON a.nid = c.entity_id
   INNER JOIN `informea_drupal`.field_data_field_odata_identifier d ON c.field_treaty_target_id = d.entity_id;
+  INNER JOIN `informea_drupal`.node treaty ON c.field_treaty_target_id = treaty.nid;
 
 -- SITES
 -- informea_sites
@@ -432,6 +438,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.field_odata_identifier_value AS `type`,
     iso2.field_country_iso2_value AS country,
     c.field_odata_identifier_value AS treaty,
+    treaty.uuid AS treatyUUID,
     url.field_url_url AS url,
     lat.field_latitude_value AS latitude,
     lon.field_longitude_value AS longitude,

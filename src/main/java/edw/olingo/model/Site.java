@@ -47,6 +47,8 @@ public class Site {
 	private String country;
 	@Column(nullable = false)
 	private String treaty;
+	@Column(nullable = false)
+	private String treatyUUID;
 	private String url;
 	private Double latitude;
 	private Double longitude;
@@ -91,5 +93,9 @@ public class Site {
 
 	public Date getUpdated() {
 		return updated;
+	}
+
+	public String getTreatyUUID() {
+		return treatyUUID;
 	}
 }

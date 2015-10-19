@@ -44,6 +44,8 @@ public class NationalPlan {
 	@Column(nullable = false)
 	private String treaty;
 	@Column(nullable = false)
+	private String treatyUUID;
+	@Column(nullable = false)
 	private String country;
 	@Column(nullable = false)
 	private String type;
@@ -95,5 +97,9 @@ public class NationalPlan {
 
 	public String getId() {
 		return id;
+	}
+
+	public String getTreatyUUID() {
+		return treatyUUID;
 	}
 }

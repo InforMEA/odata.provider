@@ -45,6 +45,8 @@ public class CountryReport {
 	@Column(nullable = false)
 	private String treaty;
 	@Column(nullable = false)
+	private String treatyUUID;
+	@Column(nullable = false)
 	private String country;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -91,5 +93,9 @@ public class CountryReport {
 
 	public String getId() {
 		return id;
+	}
+
+	public String getTreatyUUID() {
+		return treatyUUID;
 	}
 }

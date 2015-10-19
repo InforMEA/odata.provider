@@ -36,7 +36,11 @@ public class ContactTreaty {
 
 	@SuppressWarnings("unused")
 	private Contact contact;
+
+	@Column(nullable = false)
 	private String treaty;
+	@Column(nullable = false)
+	private String treatyUUID;
 
 	public String getTreaty() {
 		return treaty;
@@ -44,5 +48,9 @@ public class ContactTreaty {
 
 	public String getId() {
 		return id;
+	}
+
+	public String getTreatyUUID() {
+		return treatyUUID;
 	}
 }

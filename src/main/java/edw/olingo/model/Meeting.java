@@ -23,6 +23,8 @@ public class Meeting {
 
 	@Column(nullable = false)
 	private String treaty;
+	@Column(nullable = false)
+	private String treatyUUID;
 	private String url;
 
 	@Column(nullable = false)
@@ -134,5 +136,9 @@ public class Meeting {
 
 	public List<MeetingDescription> getDescriptions() {
 		return descriptions;
+	}
+
+	public String getTreatyUUID() {
+		return treatyUUID;
 	}
 }
