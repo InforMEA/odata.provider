@@ -167,7 +167,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
 
     LEFT JOIN `informea_drupal`.field_data_field_sorting_date dp ON dp.entity_id = a.nid
 
-    INNER JOIN `informea_drupal`.field_data_field_meeting m ON m.entity_id = a.nid  
+    INNER JOIN `informea_drupal`.field_data_field_meeting m ON m.entity_id = a.nid
     INNER JOIN `informea_drupal`.node n2 ON m.field_meeting_target_id = n2.nid
 
     LEFT JOIN `informea_drupal`.field_data_field_url urlm ON urlm.entity_id = m.field_meeting_target_id
