@@ -219,7 +219,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
 -- informea_decisions_keywords
 CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_keywords` AS
   SELECT 
-    CAST(CONCAT(a.id, '-en') AS CHAR) AS id, 
+    CAST(CONCAT(a.id, '-', t1.tid) AS CHAR) AS id,
     CAST(a.id AS CHAR) AS decision_id,
     'http://www.informea.org/terms/' AS namespace,
     t1.name AS term
