@@ -184,6 +184,7 @@ CREATE TABLE `informea_decisions` (
   `meetingId` varchar(64) DEFAULT NULL COMMENT 'Reference to informea_meetings table',
   `meetingTitle` varchar(64) DEFAULT NULL COMMENT 'One of meetingTitle or meetingId must be non-null',
   `meetingUrl` varchar(255) DEFAULT NULL COMMENT 'Public HTTP URL to the meeting page',
+  `displayOrder` int(11) DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
   PRIMARY KEY (`id`),
   KEY `fk_decisions_meeting` (`meetingId`),
@@ -197,7 +198,7 @@ CREATE TABLE `informea_decisions` (
 
 LOCK TABLES `informea_decisions` WRITE;
 /*!40000 ALTER TABLE `informea_decisions` DISABLE KEYS */;
-INSERT INTO `informea_decisions` VALUES ('2c776b76-57d3-4a46-a1be-c254976a0ee2','http://www.ramsar.org/node/31099','resolution','active','1234','ramsar','2015-07-03 10:45:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f','meeting1','http://chm.pops.int/linkclick.aspx?link=404&amp;amp;tabid=276&amp;amp;language=en-us','2015-12-14 17:21:55'),('55e618ce-a88d-4e35-9ae2-08c6bccbb9c6','http://www.ramsar.org/node/31100','resolution','active','n/a','ramsar','2015-07-03 11:00:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f',NULL,NULL,'2016-03-03 10:22:38'),('95d1ad86-5a21-46a7-a963-cde0d844d0fb','http://www.ramsar.org/node/31101','resolution','active','n/a','ramsar','2015-07-03 11:00:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f',NULL,NULL,'2015-12-14 17:21:41');
+INSERT INTO `informea_decisions` VALUES ('2c776b76-57d3-4a46-a1be-c254976a0ee2','http://www.ramsar.org/node/31099','resolution','active','1234','ramsar','2015-07-03 10:45:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f','meeting1','http://chm.pops.int/linkclick.aspx?link=404&amp;amp;tabid=276&amp;amp;language=en-us',3,'2015-12-14 17:21:55'),('55e618ce-a88d-4e35-9ae2-08c6bccbb9c6','http://www.ramsar.org/node/31100','resolution','active','n/a','ramsar','2015-07-03 11:00:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f',NULL,NULL,2,'2016-03-03 10:22:38'),('95d1ad86-5a21-46a7-a963-cde0d844d0fb','http://www.ramsar.org/node/31101','resolution','active','n/a','ramsar','2015-07-03 11:00:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f',NULL,NULL,1,'2015-12-14 17:21:41');
 /*!40000 ALTER TABLE `informea_decisions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -911,4 +912,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-15 13:18:18
+-- Dump completed on 2016-06-15 15:06:04
