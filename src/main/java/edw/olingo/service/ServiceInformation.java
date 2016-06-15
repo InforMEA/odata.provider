@@ -19,8 +19,8 @@ public class ServiceInformation {
 
 	public static final String UPDATE_URL = "http://www.informea.org/api.properties";
 	public static final int VERSION_MAJOR = 2;
-	public static final int VERSION_MINOR = 3;
-	public static final int VERSION_REVISION = 0;
+	public static final int VERSION_MINOR = 4;
+	public static final int VERSION_REVISION = 1;
 	public static final boolean VERSION_BETA = false;
 
 	public static String PERSISTENCE_UNIT_NAME = "persistence_unit";
@@ -40,12 +40,7 @@ public class ServiceInformation {
 			query.select(qb.count(query.from(entityKlass)));
 			count = em.createQuery(query).getSingleResult();
 		} catch (Exception ex) {
-			log.log(
-				Level.INFO,
-				String.format("ServiceInformation:countEntities(): Cannot get entity count for %s. Probably not configured?", entityKlass.getName()),
-				ex
-			);
-			ex.printStackTrace();
+			// Do not log exception (see issue #6)
 		}
 		return count;
 	}
