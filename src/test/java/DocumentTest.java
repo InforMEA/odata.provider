@@ -1,4 +1,5 @@
 import edw.olingo.model.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,13 +21,13 @@ import static org.junit.Assert.assertNull;
 @RunWith(BlockJUnit4ClassRunner.class)
 public class DocumentTest {
 
-    private static final String PERSISTENCE_UNIT_NAME = "persistence_unit";
     private EntityManagerFactory factory;
 
-    @Before
-    public void setUp() throws Exception {
-        factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-    }
+	@Before
+	public void setUp() throws Exception {
+		factory = Persistence.createEntityManagerFactory(AllTests.getPersistenceUnitName());
+	}
+
 
     @Test
     public void testGetDocuments() throws Exception {

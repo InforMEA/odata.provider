@@ -57,7 +57,7 @@ public class NationalPlansTest {
 		assertEquals("NATIONAL IMPLEMENTATION PLAN (NIP) FOR POLLUTANTS (POPs)", title.getTitle());
 		assertEquals("en", title.getLanguage());
 
-		Calendar c = new GregorianCalendar(2007, 1, 12, 1, 0, 0);
+		Calendar c = new GregorianCalendar(2007, 1, 12);
 		assertEquals(c.getTime(), row.getSubmission());
 
 		c = new GregorianCalendar(2015, 3, 22, 12, 21, 43);
