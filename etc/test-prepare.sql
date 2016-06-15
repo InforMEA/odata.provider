@@ -24,20 +24,20 @@ DROP TABLE IF EXISTS `informea_contacts`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_contacts` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `country` char(2) NOT NULL DEFAULT '',
-  `prefix` varchar(64) DEFAULT NULL,
-  `firstName` varchar(64) DEFAULT NULL,
-  `lastName` varchar(64) DEFAULT NULL,
-  `position` varchar(64) DEFAULT NULL,
-  `institution` varchar(64) DEFAULT NULL,
-  `department` varchar(64) DEFAULT NULL,
-  `type` varchar(64) DEFAULT NULL,
-  `address` varchar(64) DEFAULT NULL,
-  `email` varchar(64) DEFAULT NULL,
-  `phoneNumber` varchar(64) DEFAULT NULL,
-  `fax` varchar(64) DEFAULT NULL,
-  `primary` varchar(64) DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL,
+  `country` char(2) NOT NULL DEFAULT '' COMMENT 'Represented country (ISO code)',
+  `prefix` varchar(255) DEFAULT NULL COMMENT 'Addressing (ex. Mr, Ms., H.R.H. etc.)',
+  `firstName` varchar(255) DEFAULT NULL,
+  `lastName` varchar(255) DEFAULT NULL,
+  `position` varchar(255) DEFAULT NULL,
+  `institution` varchar(255) DEFAULT NULL,
+  `department` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL COMMENT 'See API doc for possible values',
+  `address` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL COMMENT 'Single e-mail address',
+  `phoneNumber` varchar(255) DEFAULT NULL,
+  `fax` varchar(255) DEFAULT NULL,
+  `primary` int(1) DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -48,7 +48,7 @@ CREATE TABLE `informea_contacts` (
 
 LOCK TABLES `informea_contacts` WRITE;
 /*!40000 ALTER TABLE `informea_contacts` DISABLE KEYS */;
-INSERT INTO `informea_contacts` VALUES ('471d81c2-4a22-4574-9fd1-0341797ec6de','AL','Mr.','John','Doe','Director','Biodiversity Directorate','department 1','Primary','address 1','email1@moe.gov.al','+4 224 3578','+355','1','2016-03-29 17:21:54'),('c6626713-3a16-485c-952c-718802a21b5b','AD','Mrs.','Josep','Christiansen','Desk Officer de l\'Environnement','Département du Patrimoine naturel','department 3',NULL,NULL,'email2@govern.ad','+ 875 700','+376 869','0','2016-03-30 13:21:54'),('c9b98891-6347-4755-9cdb-a08268849abb','DZ','Ms.','Chorn','Mali','Sous directrice','Direction Générale des Forêts','department 2',NULL,'address 2','email3@dgf.gov.dz','','','0','2016-02-10 14:21:54'),('e949e7b9-4a45-4ed0-b06e-679e55c31e5e','AR',NULL,'Seren Janir',NULL,'Subdirectora General de Medio Ambiente','Dirección General de Asuntos Ambientales,',NULL,NULL,NULL,'email4@mrecic.gov.ar','','','0','2016-03-30 13:21:54'),('ec8b6c87-aa11-4297-9c89-b25320a54827','AG',NULL,NULL,'Philm A. JAMES','Deputy Chief Fisheries Officer','Fisheries Division','department 4',NULL,NULL,'email5@gmail.com','','','0','2016-03-30 13:21:54');
+INSERT INTO `informea_contacts` VALUES ('471d81c2-4a22-4574-9fd1-0341797ec6de','AL','Mr.','John','Doe','Director','Biodiversity Directorate','department 1','Primary','address 1','email1@moe.gov.al','+4 224 3578','+355',1,'2016-03-29 17:21:54'),('c6626713-3a16-485c-952c-718802a21b5b','AD','Mrs.','Josep','Christiansen','Desk Officer de l\'Environnement','Département du Patrimoine naturel','department 3',NULL,NULL,'email2@govern.ad','+ 875 700','+376 869',0,'2016-03-30 13:21:54'),('c9b98891-6347-4755-9cdb-a08268849abb','DZ','Ms.','Chorn','Mali','Sous directrice','Direction Générale des Forêts','department 2',NULL,'address 2','email3@dgf.gov.dz','','',0,'2016-02-10 14:21:54'),('e949e7b9-4a45-4ed0-b06e-679e55c31e5e','AR',NULL,'Seren Janir',NULL,'Subdirectora General de Medio Ambiente','Dirección General de Asuntos Ambientales,',NULL,NULL,NULL,'email4@mrecic.gov.ar','','',0,'2016-03-30 13:21:54'),('ec8b6c87-aa11-4297-9c89-b25320a54827','AG',NULL,NULL,'Philm A. JAMES','Deputy Chief Fisheries Officer','Fisheries Division','department 4',NULL,NULL,'email5@gmail.com','','',0,'2016-03-30 13:21:54');
 /*!40000 ALTER TABLE `informea_contacts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,8 +62,10 @@ DROP TABLE IF EXISTS `informea_contacts_treaties`;
 CREATE TABLE `informea_contacts_treaties` (
   `id` varchar(64) NOT NULL DEFAULT '',
   `contact_id` varchar(64) NOT NULL DEFAULT '',
-  `treaty` varchar(32) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
+  `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  PRIMARY KEY (`id`),
+  KEY `fk_contact_treaties` (`contact_id`),
+  CONSTRAINT `fk_contact_treaties` FOREIGN KEY (`contact_id`) REFERENCES `informea_contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -86,11 +88,11 @@ DROP TABLE IF EXISTS `informea_country_reports`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_country_reports` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `treaty` varchar(64) DEFAULT NULL,
-  `country` char(2) NOT NULL DEFAULT '',
-  `submission` timestamp NULL DEFAULT NULL,
-  `url` varchar(64) DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL,
+  `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `country` char(2) NOT NULL DEFAULT '' COMMENT 'ISO 3166-1 code (ex. RO)',
+  `submission` date NOT NULL COMMENT 'Report publishing date',
+  `url` varchar(255) NOT NULL DEFAULT '' COMMENT 'HTTP public URL where document is available to view',
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -101,7 +103,7 @@ CREATE TABLE `informea_country_reports` (
 
 LOCK TABLES `informea_country_reports` WRITE;
 /*!40000 ALTER TABLE `informea_country_reports` DISABLE KEYS */;
-INSERT INTO `informea_country_reports` VALUES ('96e420cc-fb81-426b-a0e1-4571c255a5d0','ramsar','AL','2011-12-31 22:00:00','http://www.ramsar.org/node/14398','2015-05-27 08:07:01'),('e802070d-eece-4348-ae0a-aba6d1dcd58e','ramsar','AL','2011-12-31 22:00:00','http://www.ramsar.org/node/14399','2015-05-27 08:06:24'),('f2e868e6-ed35-45b2-8a2a-602fe1d6aa12','ramsar','AG','2007-12-31 22:00:00','http://www.ramsar.org/node/14408','2015-05-27 08:17:06');
+INSERT INTO `informea_country_reports` VALUES ('96e420cc-fb81-426b-a0e1-4571c255a5d0','ramsar','AL','2012-01-01','http://www.ramsar.org/node/14398','2015-05-27 08:07:01'),('e802070d-eece-4348-ae0a-aba6d1dcd58e','ramsar','AL','2012-01-01','http://www.ramsar.org/node/14399','2015-05-27 08:06:24'),('f2e868e6-ed35-45b2-8a2a-602fe1d6aa12','ramsar','AG','2008-01-01','http://www.ramsar.org/node/14408','2015-05-27 08:17:06');
 /*!40000 ALTER TABLE `informea_country_reports` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,13 +116,15 @@ DROP TABLE IF EXISTS `informea_country_reports_documents`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_country_reports_documents` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `country_report_id` varchar(64) DEFAULT NULL,
-  `diskPath` varchar(64) DEFAULT NULL,
-  `url` varchar(256) DEFAULT NULL,
-  `mimeType` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `filename` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `country_report_id` varchar(64) NOT NULL DEFAULT '',
+  `diskPath` text COMMENT 'DEPRECATED. Set to NULL',
+  `url` text NOT NULL COMMENT 'HTTP public URL where document is available for download',
+  `mimeType` varchar(16) DEFAULT NULL COMMENT 'Internet MIME type (ex. application/pdf)',
+  `language` varchar(5) DEFAULT NULL COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `filename` varchar(64) DEFAULT NULL COMMENT 'Preffered filename (ex. 12.1-meeting-ar.doc)',
+  PRIMARY KEY (`id`),
+  KEY `fk_country_reports_documents` (`country_report_id`),
+  CONSTRAINT `fk_country_reports_documents` FOREIGN KEY (`country_report_id`) REFERENCES `informea_country_reports` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -144,9 +148,11 @@ DROP TABLE IF EXISTS `informea_country_reports_title`;
 CREATE TABLE `informea_country_reports_title` (
   `id` varchar(64) NOT NULL DEFAULT '',
   `country_report_id` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `title` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `title` text NOT NULL COMMENT 'Localized title',
+  PRIMARY KEY (`id`),
+  KEY `fk_country_reports_title` (`country_report_id`),
+  CONSTRAINT `fk_country_reports_title` FOREIGN KEY (`country_report_id`) REFERENCES `informea_country_reports` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -169,17 +175,19 @@ DROP TABLE IF EXISTS `informea_decisions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_decisions` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `link` varchar(255) DEFAULT NULL,
-  `type` varchar(64) DEFAULT NULL,
-  `status` varchar(64) DEFAULT NULL,
-  `number` varchar(64) DEFAULT NULL,
-  `treaty` varchar(64) DEFAULT NULL,
-  `published` timestamp NULL DEFAULT NULL,
-  `meetingId` varchar(64) DEFAULT NULL,
-  `meetingTitle` varchar(64) DEFAULT NULL,
-  `meetingUrl` varchar(255) DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `link` varchar(255) DEFAULT NULL COMMENT 'HTTP public URL where document is available to view',
+  `type` varchar(64) DEFAULT NULL COMMENT 'ex. Decision, Recommendation etc.',
+  `status` varchar(64) DEFAULT NULL COMMENT 'ex. Active, Retired, Amended etc.',
+  `number` varchar(64) DEFAULT '' COMMENT 'ex. COP12/23.1',
+  `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `published` timestamp NULL DEFAULT NULL COMMENT 'Report publishing date',
+  `meetingId` varchar(64) DEFAULT NULL COMMENT 'Reference to informea_meetings table',
+  `meetingTitle` varchar(64) DEFAULT NULL COMMENT 'One of meetingTitle or meetingId must be non-null',
+  `meetingUrl` varchar(255) DEFAULT NULL COMMENT 'Public HTTP URL to the meeting page',
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
+  PRIMARY KEY (`id`),
+  KEY `fk_decisions_meeting` (`meetingId`),
+  CONSTRAINT `fk_decisions_meeting` FOREIGN KEY (`meetingId`) REFERENCES `informea_meetings` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -202,10 +210,12 @@ DROP TABLE IF EXISTS `informea_decisions_content`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_decisions_content` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `decision_id` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `content` text,
-  PRIMARY KEY (`id`)
+  `decision_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `content` text NOT NULL COMMENT 'Localized content',
+  PRIMARY KEY (`id`),
+  KEY `fk_decisions_content` (`decision_id`),
+  CONSTRAINT `fk_decisions_content` FOREIGN KEY (`decision_id`) REFERENCES `informea_decisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -228,13 +238,15 @@ DROP TABLE IF EXISTS `informea_decisions_documents`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_decisions_documents` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `decision_id` varchar(64) DEFAULT NULL,
-  `diskPath` varchar(64) DEFAULT NULL,
-  `url` varchar(256) DEFAULT NULL,
-  `mimeType` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `filename` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `decision_id` varchar(64) NOT NULL DEFAULT '',
+  `diskPath` varchar(64) DEFAULT NULL COMMENT 'DEPRECATED. Set to NULL',
+  `url` varchar(256) DEFAULT NULL COMMENT 'HTTP public URL where document is available for download',
+  `mimeType` varchar(64) DEFAULT NULL COMMENT 'Internet MIME type (ex. application/pdf)',
+  `language` varchar(5) DEFAULT NULL COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `filename` varchar(64) DEFAULT NULL COMMENT 'Preffered filename (ex. 12.1-meeting-ar.doc)',
+  PRIMARY KEY (`id`),
+  KEY `fk_decisions_documents` (`decision_id`),
+  CONSTRAINT `fk_decisions_documents` FOREIGN KEY (`decision_id`) REFERENCES `informea_decisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -257,10 +269,12 @@ DROP TABLE IF EXISTS `informea_decisions_keywords`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_decisions_keywords` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `decision_id` varchar(64) DEFAULT NULL,
-  `namespace` varchar(255) DEFAULT NULL,
-  `term` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `decision_id` varchar(64) NOT NULL DEFAULT '',
+  `namespace` varchar(255) NOT NULL DEFAULT '' COMMENT 'Unique vocabulary namespace (ex. http://www.mea.org/terms)',
+  `term` varchar(255) NOT NULL DEFAULT '' COMMENT 'English term name',
+  PRIMARY KEY (`id`),
+  KEY `fk_decisions_keywords` (`decision_id`),
+  CONSTRAINT `fk_decisions_keywords` FOREIGN KEY (`decision_id`) REFERENCES `informea_decisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -283,10 +297,12 @@ DROP TABLE IF EXISTS `informea_decisions_longtitle`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_decisions_longtitle` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `decision_id` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `long_title` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `decision_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `long_title` text NOT NULL COMMENT 'Localized title',
+  PRIMARY KEY (`id`),
+  KEY `fk_decisions_longtitle` (`decision_id`),
+  CONSTRAINT `fk_decisions_longtitle` FOREIGN KEY (`decision_id`) REFERENCES `informea_decisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -309,10 +325,12 @@ DROP TABLE IF EXISTS `informea_decisions_summary`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_decisions_summary` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `decision_id` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `summary` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `decision_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `summary` text NOT NULL COMMENT 'Localized summary',
+  PRIMARY KEY (`id`),
+  KEY `fk_decisions_summary` (`decision_id`),
+  CONSTRAINT `fk_decisions_summary` FOREIGN KEY (`decision_id`) REFERENCES `informea_decisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -335,10 +353,12 @@ DROP TABLE IF EXISTS `informea_decisions_title`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_decisions_title` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `decision_id` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `title` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `decision_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `title` text NOT NULL COMMENT 'Localized title',
+  PRIMARY KEY (`id`),
+  KEY `fk_decisions_title` (`decision_id`),
+  CONSTRAINT `fk_decisions_title` FOREIGN KEY (`decision_id`) REFERENCES `informea_decisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -360,14 +380,14 @@ DROP TABLE IF EXISTS `informea_documents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_documents` (
+  `id` varchar(64) NOT NULL,
   `schemaVersion` varchar(64) NOT NULL,
-  `id` varchar(64) NOT NULL DEFAULT '',
-  `published` timestamp NULL DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL,
-  `treaty` varchar(64) DEFAULT NULL,
-  `thumbnailUrl` varchar(255) DEFAULT NULL,
-  `displayOrder` int(11) DEFAULT NULL,
-  `country` char(2) DEFAULT NULL,
+  `published` datetime DEFAULT NULL COMMENT 'Report publishing date',
+  `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `thumbnailUrl` varchar(255) DEFAULT NULL COMMENT 'Public HTTP image URL',
+  `country` char(2) DEFAULT NULL COMMENT 'ISO 3166-1 code (ex. RO)',
+  `displayOrder` int(11) DEFAULT NULL COMMENT 'Order of display when listed',
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -378,7 +398,7 @@ CREATE TABLE `informea_documents` (
 
 LOCK TABLES `informea_documents` WRITE;
 /*!40000 ALTER TABLE `informea_documents` DISABLE KEYS */;
-INSERT INTO `informea_documents` VALUES ('1','00cf041a-ac5b-4335-a4cf-0d5d9354015f','2008-10-02 09:34:56','2014-06-16 10:05:13','pacific-inslands-cetaceans','http://www.cms.int/sites/default/filespublication/gorilla_0_3_0_0.jpg',1,'RO'),('1','30d45d8f-5e9f-4c0d-8c04-c05cf4b0d82d','2015-09-01 21:00:00','2016-04-12 16:56:50','eurobats','http://www.cms.int/sites/default/filespublication/family guide_0_3_0_0.jpg',2,'DE'),('1','a18de716-1fbe-47f2-bd63-524ca9a1b7cd','2010-10-01 21:00:00','2015-08-05 15:51:11','sharks',NULL,0,NULL);
+INSERT INTO `informea_documents` VALUES ('00cf041a-ac5b-4335-a4cf-0d5d9354015f','1','2008-10-02 12:34:56','pacific-inslands-cetaceans','http://www.cms.int/sites/default/filespublication/gorilla_0_3_0_0.jpg','RO',1,'2014-06-16 10:05:13'),('30d45d8f-5e9f-4c0d-8c04-c05cf4b0d82d','1','2015-09-02 00:00:00','eurobats','http://www.cms.int/sites/default/filespublication/family guide_0_3_0_0.jpg','DE',2,'2016-04-12 16:56:50'),('a18de716-1fbe-47f2-bd63-524ca9a1b7cd','1','2010-10-02 00:00:00','sharks',NULL,NULL,0,'2015-08-05 15:51:11');
 /*!40000 ALTER TABLE `informea_documents` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -391,10 +411,12 @@ DROP TABLE IF EXISTS `informea_documents_authors`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_documents_authors` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `document_id` varchar(64) DEFAULT NULL,
-  `type` varchar(64) DEFAULT NULL,
-  `name` text,
-  PRIMARY KEY (`id`)
+  `document_id` varchar(64) NOT NULL DEFAULT '',
+  `type` varchar(64) DEFAULT NULL COMMENT 'Author type (ex. person, organisation)',
+  `name` text NOT NULL COMMENT 'Author name',
+  PRIMARY KEY (`id`),
+  KEY `fk_documents_authors` (`document_id`),
+  CONSTRAINT `fk_documents_authors` FOREIGN KEY (`document_id`) REFERENCES `informea_documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -417,10 +439,12 @@ DROP TABLE IF EXISTS `informea_documents_descriptions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_documents_descriptions` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `document_id` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `value` text,
-  PRIMARY KEY (`id`)
+  `document_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `value` text NOT NULL COMMENT 'Localized description',
+  PRIMARY KEY (`id`),
+  KEY `fk_documents_descriptions` (`document_id`),
+  CONSTRAINT `fk_documents_descriptions` FOREIGN KEY (`document_id`) REFERENCES `informea_documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -443,13 +467,15 @@ DROP TABLE IF EXISTS `informea_documents_files`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_documents_files` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `document_id` varchar(64) DEFAULT NULL,
-  `url` varchar(256) DEFAULT NULL,
-  `content` varchar(64) DEFAULT NULL,
-  `mimeType` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `filename` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `document_id` varchar(64) NOT NULL DEFAULT '',
+  `url` varchar(255) NOT NULL DEFAULT '' COMMENT 'HTTP public URL where document is available for download',
+  `content` varchar(64) DEFAULT NULL COMMENT 'DEPRECATED. Set to NULL',
+  `mimeType` varchar(64) DEFAULT NULL COMMENT 'Internet MIME type (ex. application/pdf)',
+  `language` varchar(5) DEFAULT NULL COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `filename` varchar(255) DEFAULT NULL COMMENT 'Preffered filename (ex. 12.1-meeting-ar.doc)',
+  PRIMARY KEY (`id`),
+  KEY `fk_documents_files` (`document_id`),
+  CONSTRAINT `fk_documents_files` FOREIGN KEY (`document_id`) REFERENCES `informea_documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -472,10 +498,12 @@ DROP TABLE IF EXISTS `informea_documents_identifiers`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_documents_identifiers` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `document_id` varchar(64) DEFAULT NULL,
-  `name` varchar(64) DEFAULT NULL,
-  `value` text,
-  PRIMARY KEY (`id`)
+  `document_id` varchar(64) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `value` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_documents_identifiers` (`document_id`),
+  CONSTRAINT `fk_documents_identifiers` FOREIGN KEY (`document_id`) REFERENCES `informea_documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -498,12 +526,14 @@ DROP TABLE IF EXISTS `informea_documents_keywords`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_documents_keywords` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `document_id` varchar(64) DEFAULT NULL,
-  `termURI` varchar(255) DEFAULT NULL,
-  `scope` varchar(64) DEFAULT NULL,
-  `literalForm` varchar(64) DEFAULT NULL,
-  `sourceURL` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `document_id` varchar(64) NOT NULL DEFAULT '',
+  `termURI` varchar(255) NOT NULL DEFAULT '',
+  `scope` varchar(64) NOT NULL DEFAULT '',
+  `literalForm` varchar(64) NOT NULL DEFAULT '',
+  `sourceURL` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `fk_documents_keywords` (`document_id`),
+  CONSTRAINT `fk_documents_keywords` FOREIGN KEY (`document_id`) REFERENCES `informea_documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -526,10 +556,12 @@ DROP TABLE IF EXISTS `informea_documents_references`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_documents_references` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `type` varchar(64) DEFAULT NULL,
-  `document_id` varchar(64) DEFAULT NULL,
-  `refId` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `type` varchar(64) NOT NULL DEFAULT '',
+  `document_id` varchar(64) NOT NULL DEFAULT '',
+  `refId` varchar(255) NOT NULL DEFAULT '' COMMENT 'Reference to other OData entities (IDs)',
+  PRIMARY KEY (`id`),
+  KEY `fk_documents_references` (`document_id`),
+  CONSTRAINT `fk_documents_references` FOREIGN KEY (`document_id`) REFERENCES `informea_documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -552,12 +584,14 @@ DROP TABLE IF EXISTS `informea_documents_tags`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_documents_tags` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `document_id` varchar(64) DEFAULT NULL,
-  `language` varchar(255) DEFAULT NULL,
-  `scope` varchar(64) DEFAULT NULL,
-  `value` varchar(64) DEFAULT NULL,
-  `comment` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `document_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `scope` varchar(64) NOT NULL DEFAULT '',
+  `value` varchar(64) NOT NULL DEFAULT '',
+  `comment` varchar(255) DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `fk_documents_tags` (`document_id`),
+  CONSTRAINT `fk_documents_tags` FOREIGN KEY (`document_id`) REFERENCES `informea_documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -580,10 +614,12 @@ DROP TABLE IF EXISTS `informea_documents_titles`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_documents_titles` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `document_id` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `value` text,
-  PRIMARY KEY (`id`)
+  `document_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `value` text NOT NULL COMMENT 'Localized title',
+  PRIMARY KEY (`id`),
+  KEY `fk_documents_titles` (`document_id`),
+  CONSTRAINT `fk_documents_titles` FOREIGN KEY (`document_id`) REFERENCES `informea_documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -606,9 +642,11 @@ DROP TABLE IF EXISTS `informea_documents_types`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_documents_types` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `document_id` varchar(64) DEFAULT NULL,
-  `value` text,
-  PRIMARY KEY (`id`)
+  `document_id` varchar(64) NOT NULL DEFAULT '',
+  `value` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_documents_types` (`document_id`),
+  CONSTRAINT `fk_documents_types` FOREIGN KEY (`document_id`) REFERENCES `informea_documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -631,23 +669,23 @@ DROP TABLE IF EXISTS `informea_meetings`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_meetings` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `treaty` varchar(64) DEFAULT NULL,
+  `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
   `url` varchar(255) DEFAULT NULL,
-  `start` datetime DEFAULT NULL,
+  `start` datetime NOT NULL,
   `end` datetime DEFAULT NULL,
   `repetition` varchar(64) DEFAULT NULL,
   `kind` varchar(64) DEFAULT NULL,
   `type` varchar(64) DEFAULT NULL,
   `access` varchar(64) DEFAULT NULL,
   `status` varchar(64) DEFAULT NULL,
-  `imageUrl` varchar(64) DEFAULT NULL,
+  `imageUrl` varchar(64) DEFAULT NULL COMMENT 'HTTP public URL where image is available to reference',
   `imageCopyright` varchar(64) DEFAULT NULL,
   `location` varchar(64) DEFAULT NULL,
   `city` varchar(64) DEFAULT NULL,
-  `country` char(2) DEFAULT NULL,
+  `country` char(2) NOT NULL DEFAULT '' COMMENT 'ISO 3166-1 code (ex. RO)',
   `latitude` decimal(12,9) DEFAULT NULL,
   `longitude` decimal(12,9) DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -671,10 +709,12 @@ DROP TABLE IF EXISTS `informea_meetings_description`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_meetings_description` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `meeting_id` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `description` text,
-  PRIMARY KEY (`id`)
+  `meeting_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_meetings_description` (`meeting_id`),
+  CONSTRAINT `fk_meetings_description` FOREIGN KEY (`meeting_id`) REFERENCES `informea_meetings` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -697,10 +737,12 @@ DROP TABLE IF EXISTS `informea_meetings_title`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_meetings_title` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `meeting_id` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `title` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `meeting_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `title` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_meetings_title` (`meeting_id`),
+  CONSTRAINT `fk_meetings_title` FOREIGN KEY (`meeting_id`) REFERENCES `informea_meetings` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -723,12 +765,12 @@ DROP TABLE IF EXISTS `informea_national_plans`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_national_plans` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `treaty` varchar(64) DEFAULT NULL,
-  `country` char(2) NOT NULL DEFAULT '',
-  `submission` timestamp NULL DEFAULT NULL,
-  `url` varchar(64) DEFAULT NULL,
+  `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `country` char(2) NOT NULL DEFAULT '' COMMENT 'ISO 3166-1 code (ex. RO)',
+  `submission` date DEFAULT NULL COMMENT 'Report publishing date',
+  `url` varchar(64) NOT NULL DEFAULT '' COMMENT 'HTTP public URL where document is available to view',
   `type` varchar(64) DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -739,7 +781,7 @@ CREATE TABLE `informea_national_plans` (
 
 LOCK TABLES `informea_national_plans` WRITE;
 /*!40000 ALTER TABLE `informea_national_plans` DISABLE KEYS */;
-INSERT INTO `informea_national_plans` VALUES ('4298e0ab-c687-4cbe-b849-f3a16d63284e','stockholm','AL','2007-02-11 23:00:00','http://www.cbd.int/doc/world/ve/ve-nbsap-01-es.pdf','nip','2015-04-22 09:21:43'),('a6f6ecc6-7a39-4aac-b488-f3618fd3d882','stockholm','TZ','2006-06-11 21:00:00','url1','nip','2015-08-28 15:03:50');
+INSERT INTO `informea_national_plans` VALUES ('4298e0ab-c687-4cbe-b849-f3a16d63284e','stockholm','AL','2007-02-12','http://www.cbd.int/doc/world/ve/ve-nbsap-01-es.pdf','nip','2015-04-22 09:21:43'),('a6f6ecc6-7a39-4aac-b488-f3618fd3d882','stockholm','TZ','2006-06-12','url1','nip','2015-08-28 15:03:50');
 /*!40000 ALTER TABLE `informea_national_plans` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -752,13 +794,15 @@ DROP TABLE IF EXISTS `informea_national_plans_documents`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_national_plans_documents` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `national_plan_id` varchar(64) DEFAULT NULL,
-  `diskPath` varchar(64) DEFAULT NULL,
-  `url` varchar(256) DEFAULT NULL,
-  `mimeType` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `filename` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `national_plan_id` varchar(64) NOT NULL DEFAULT '',
+  `diskPath` varchar(64) DEFAULT NULL COMMENT 'DEPRECATED. Set to NULL',
+  `url` varchar(256) NOT NULL DEFAULT '' COMMENT 'HTTP public URL where document is available for download',
+  `mimeType` varchar(64) DEFAULT NULL COMMENT 'Internet MIME type (ex. application/pdf)',
+  `language` varchar(5) DEFAULT NULL COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `filename` varchar(64) DEFAULT NULL COMMENT 'Preffered filename (ex. 12.1-meeting-ar.doc)',
+  PRIMARY KEY (`id`),
+  KEY `fk_national_plans_documents` (`national_plan_id`),
+  CONSTRAINT `fk_national_plans_documents` FOREIGN KEY (`national_plan_id`) REFERENCES `informea_national_plans` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -781,10 +825,12 @@ DROP TABLE IF EXISTS `informea_national_plans_title`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_national_plans_title` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `national_plan_id` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `title` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `national_plan_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `title` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_national_plans_title` (`national_plan_id`),
+  CONSTRAINT `fk_national_plans_title` FOREIGN KEY (`national_plan_id`) REFERENCES `informea_national_plans` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -808,12 +854,12 @@ DROP TABLE IF EXISTS `informea_sites`;
 CREATE TABLE `informea_sites` (
   `id` varchar(64) NOT NULL DEFAULT '',
   `type` varchar(64) DEFAULT NULL,
-  `country` char(2) DEFAULT NULL,
-  `treaty` varchar(64) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
+  `country` char(2) DEFAULT NULL COMMENT 'ISO 3166-1 code (ex. RO)',
+  `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `url` varchar(255) NOT NULL DEFAULT '' COMMENT 'HTTP public URL where document is available to visit',
   `latitude` decimal(12,9) DEFAULT NULL,
   `longitude` decimal(12,9) DEFAULT NULL,
-  `updated` timestamp NULL DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -837,10 +883,12 @@ DROP TABLE IF EXISTS `informea_sites_name`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `informea_sites_name` (
   `id` varchar(64) NOT NULL DEFAULT '',
-  `site_id` varchar(64) DEFAULT NULL,
-  `language` varchar(64) DEFAULT NULL,
-  `name` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `site_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `name` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_sites_name` (`site_id`),
+  CONSTRAINT `fk_sites_name` FOREIGN KEY (`site_id`) REFERENCES `informea_sites` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -863,4 +911,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-20 23:50:00
+-- Dump completed on 2016-06-15 13:18:18
