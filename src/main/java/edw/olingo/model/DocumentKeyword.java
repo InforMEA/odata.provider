@@ -15,7 +15,6 @@ public class DocumentKeyword {
     @Column(name="id")
     private String id;
 
-    @SuppressWarnings("unused")
     private Document document;
 
     private String termURI;

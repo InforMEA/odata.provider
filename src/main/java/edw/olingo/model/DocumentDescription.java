@@ -16,7 +16,6 @@ public class DocumentDescription {
     @Column(name="id")
     private String id;
 
-    @SuppressWarnings("unused")
     private Document document;
 
     private String language;

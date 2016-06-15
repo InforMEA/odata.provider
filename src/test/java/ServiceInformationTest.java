@@ -12,8 +12,6 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import edw.olingo.model.Meeting;
 import edw.olingo.service.ServiceInformation;
 
-import javax.persistence.Persistence;
-
 @RunWith(BlockJUnit4ClassRunner.class)
 public class ServiceInformationTest {
 
