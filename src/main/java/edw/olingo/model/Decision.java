@@ -59,6 +59,7 @@ public class Decision {
 	private String meetingTitle;
 	@Column(name = "meetingUrl")
 	private String meetingUrl;
+	private Integer displayOrder;
 
 	@OneToMany(mappedBy = "decision", cascade = CascadeType.ALL)
 	private List<DecisionTitle> titles = new ArrayList<DecisionTitle>();
@@ -145,4 +146,8 @@ public class Decision {
 	public String getId() {
 		return id;
 	}
+
+    public Integer getDisplayOrder() {
+        return displayOrder;
+    }
 }
