@@ -14,6 +14,7 @@
 					<JPAAttribute name="published">published</JPAAttribute>
 					<JPAAttribute name="updated">updated</JPAAttribute>
 					<JPAAttribute name="treaty">treaty</JPAAttribute>
+					<JPAAttribute name="displayOrder">displayOrder</JPAAttribute>
 				</JPAAttributes>
 				<JPARelationships>
 					<JPARelationship name="authors">authors</JPARelationship>
@@ -166,6 +167,7 @@
 					<JPAAttribute name="meetingId">meetingId</JPAAttribute>
 					<JPAAttribute name="meetingTitle">meetingTitle</JPAAttribute>
 					<JPAAttribute name="meetingUrl">meetingUrl</JPAAttribute>
+					<JPAAttribute name="displayOrder">displayOrder</JPAAttribute>
 				</JPAAttributes>
 				<JPARelationships>
 					<JPARelationship name="titles">title</JPARelationship>
