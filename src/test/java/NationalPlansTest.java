@@ -42,6 +42,7 @@ public class NationalPlansTest {
 		NationalPlan row = em.find(NationalPlan.class, "4298e0ab-c687-4cbe-b849-f3a16d63284e");
 
 		assertEquals("stockholm", row.getTreaty());
+		assertEquals("449a478b-fcdb-4981-afee-a7ca2e7fc107", row.getTreatyUUID());
 		assertEquals("AL", row.getCountry());
 		assertEquals("http://www.cbd.int/doc/world/ve/ve-nbsap-01-es.pdf", row.getUrl());
 		assertEquals("nip", row.getType());

@@ -51,6 +51,7 @@ public class DocumentTest {
 		assertEquals(c.getTime(), row.getUpdated());
 
 		assertEquals("cms", row.getTreaty());
+		assertEquals("e9277c8f-114f-49b6-95bd-bc5aba93589f", row.getTreatyUUID());
 		assertEquals("http://www.cms.int/sites/default/filespublication/gorilla_0_3_0_0.jpg", row.getThumbnailUrl());
 		assertEquals(new Integer(1), row.getDisplayOrder());
 		assertEquals("RO", row.getCountry());

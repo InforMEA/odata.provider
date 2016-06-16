@@ -63,8 +63,11 @@ CREATE TABLE `informea_contacts_treaties` (
   `id` varchar(64) NOT NULL DEFAULT '',
   `contact_id` varchar(64) NOT NULL DEFAULT '',
   `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `treatyUUID` varchar(64) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `fk_contact_treaties` (`contact_id`),
+  KEY `fk_contacts_treaties_treaty` (`treatyUUID`),
+  CONSTRAINT `fk_contacts_treaties_treaty` FOREIGN KEY (`treatyUUID`) REFERENCES `informea_treaties` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_contact_treaties` FOREIGN KEY (`contact_id`) REFERENCES `informea_contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -75,7 +78,7 @@ CREATE TABLE `informea_contacts_treaties` (
 
 LOCK TABLES `informea_contacts_treaties` WRITE;
 /*!40000 ALTER TABLE `informea_contacts_treaties` DISABLE KEYS */;
-INSERT INTO `informea_contacts_treaties` VALUES ('471d81c2-4a22-4574-9fd1-0341797ec6de-cites','471d81c2-4a22-4574-9fd1-0341797ec6de','cites'),('471d81c2-4a22-4574-9fd1-0341797ec6de-cms','471d81c2-4a22-4574-9fd1-0341797ec6de','cms'),('c6626713-3a16-485c-952c-718802a21b5b-cms','c6626713-3a16-485c-952c-718802a21b5b','cms'),('c9b98891-6347-4755-9cdb-a08268849abb-cms','c9b98891-6347-4755-9cdb-a08268849abb','cms'),('e949e7b9-4a45-4ed0-b06e-679e55c31e5e-cms','e949e7b9-4a45-4ed0-b06e-679e55c31e5e','cms'),('ec8b6c87-aa11-4297-9c89-b25320a54827-cms','ec8b6c87-aa11-4297-9c89-b25320a54827','cms');
+INSERT INTO `informea_contacts_treaties` VALUES ('471d81c2-4a22-4574-9fd1-0341797ec6de-cites','471d81c2-4a22-4574-9fd1-0341797ec6de','cites','8642d125-1fc7-43a1-bdde-a5a1c3a4bb87'),('471d81c2-4a22-4574-9fd1-0341797ec6de-cms','471d81c2-4a22-4574-9fd1-0341797ec6de','cms','e9277c8f-114f-49b6-95bd-bc5aba93589f'),('c6626713-3a16-485c-952c-718802a21b5b-cms','c6626713-3a16-485c-952c-718802a21b5b','cms','e9277c8f-114f-49b6-95bd-bc5aba93589f'),('c9b98891-6347-4755-9cdb-a08268849abb-cms','c9b98891-6347-4755-9cdb-a08268849abb','cms','e9277c8f-114f-49b6-95bd-bc5aba93589f'),('e949e7b9-4a45-4ed0-b06e-679e55c31e5e-cms','e949e7b9-4a45-4ed0-b06e-679e55c31e5e','cms','e9277c8f-114f-49b6-95bd-bc5aba93589f'),('ec8b6c87-aa11-4297-9c89-b25320a54827-cms','ec8b6c87-aa11-4297-9c89-b25320a54827','cms','e9277c8f-114f-49b6-95bd-bc5aba93589f');
 /*!40000 ALTER TABLE `informea_contacts_treaties` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,11 +92,14 @@ DROP TABLE IF EXISTS `informea_country_reports`;
 CREATE TABLE `informea_country_reports` (
   `id` varchar(64) NOT NULL DEFAULT '',
   `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `treatyUUID` varchar(64) NOT NULL DEFAULT '',
   `country` char(2) NOT NULL DEFAULT '' COMMENT 'ISO 3166-1 code (ex. RO)',
   `submission` date NOT NULL COMMENT 'Report publishing date',
   `url` varchar(255) NOT NULL DEFAULT '' COMMENT 'HTTP public URL where document is available to view',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_country_reports_treaties` (`treatyUUID`),
+  CONSTRAINT `fk_country_reports_treaties` FOREIGN KEY (`treatyUUID`) REFERENCES `informea_treaties` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -103,7 +109,7 @@ CREATE TABLE `informea_country_reports` (
 
 LOCK TABLES `informea_country_reports` WRITE;
 /*!40000 ALTER TABLE `informea_country_reports` DISABLE KEYS */;
-INSERT INTO `informea_country_reports` VALUES ('96e420cc-fb81-426b-a0e1-4571c255a5d0','ramsar','AL','2012-01-01','http://www.ramsar.org/node/14398','2015-05-27 08:07:01'),('e802070d-eece-4348-ae0a-aba6d1dcd58e','ramsar','AL','2012-01-01','http://www.ramsar.org/node/14399','2015-05-27 08:06:24'),('f2e868e6-ed35-45b2-8a2a-602fe1d6aa12','ramsar','AG','2008-01-01','http://www.ramsar.org/node/14408','2015-05-27 08:17:06');
+INSERT INTO `informea_country_reports` VALUES ('96e420cc-fb81-426b-a0e1-4571c255a5d0','ramsar','0cf90a8c-84fd-4bea-8299-ad56c0d3a463','AL','2012-01-01','http://www.ramsar.org/node/14398','2015-05-27 08:07:01'),('e802070d-eece-4348-ae0a-aba6d1dcd58e','ramsar','0cf90a8c-84fd-4bea-8299-ad56c0d3a463','AL','2012-01-01','http://www.ramsar.org/node/14399','2015-05-27 08:06:24'),('f2e868e6-ed35-45b2-8a2a-602fe1d6aa12','ramsar','0cf90a8c-84fd-4bea-8299-ad56c0d3a463','AG','2008-01-01','http://www.ramsar.org/node/14408','2015-05-27 08:17:06');
 /*!40000 ALTER TABLE `informea_country_reports` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,6 +186,7 @@ CREATE TABLE `informea_decisions` (
   `status` varchar(64) DEFAULT NULL COMMENT 'ex. Active, Retired, Amended etc.',
   `number` varchar(64) DEFAULT '' COMMENT 'ex. COP12/23.1',
   `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `treatyUUID` varchar(64) NOT NULL,
   `published` timestamp NULL DEFAULT NULL COMMENT 'Report publishing date',
   `meetingId` varchar(64) DEFAULT NULL COMMENT 'Reference to informea_meetings table',
   `meetingTitle` varchar(64) DEFAULT NULL COMMENT 'One of meetingTitle or meetingId must be non-null',
@@ -188,7 +195,9 @@ CREATE TABLE `informea_decisions` (
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
   PRIMARY KEY (`id`),
   KEY `fk_decisions_meeting` (`meetingId`),
-  CONSTRAINT `fk_decisions_meeting` FOREIGN KEY (`meetingId`) REFERENCES `informea_meetings` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_decisions_treaty` (`treatyUUID`),
+  CONSTRAINT `fk_decisions_meeting` FOREIGN KEY (`meetingId`) REFERENCES `informea_meetings` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_decisions_treaty` FOREIGN KEY (`treatyUUID`) REFERENCES `informea_treaties` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -198,7 +207,7 @@ CREATE TABLE `informea_decisions` (
 
 LOCK TABLES `informea_decisions` WRITE;
 /*!40000 ALTER TABLE `informea_decisions` DISABLE KEYS */;
-INSERT INTO `informea_decisions` VALUES ('2c776b76-57d3-4a46-a1be-c254976a0ee2','http://www.ramsar.org/node/31099','resolution','active','1234','ramsar','2015-07-03 10:45:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f','meeting1','http://chm.pops.int/linkclick.aspx?link=404&amp;amp;tabid=276&amp;amp;language=en-us',3,'2015-12-14 17:21:55'),('55e618ce-a88d-4e35-9ae2-08c6bccbb9c6','http://www.ramsar.org/node/31100','resolution','active','n/a','ramsar','2015-07-03 11:00:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f',NULL,NULL,2,'2016-03-03 10:22:38'),('95d1ad86-5a21-46a7-a963-cde0d844d0fb','http://www.ramsar.org/node/31101','resolution','active','n/a','ramsar','2015-07-03 11:00:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f',NULL,NULL,1,'2015-12-14 17:21:41');
+INSERT INTO `informea_decisions` VALUES ('2c776b76-57d3-4a46-a1be-c254976a0ee2','http://www.ramsar.org/node/31099','resolution','active','1234','ramsar','0cf90a8c-84fd-4bea-8299-ad56c0d3a463','2015-07-03 10:45:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f','meeting1','http://chm.pops.int/linkclick.aspx?link=404&amp;amp;tabid=276&amp;amp;language=en-us',3,'2015-12-14 17:21:55'),('55e618ce-a88d-4e35-9ae2-08c6bccbb9c6','http://www.ramsar.org/node/31100','resolution','active','n/a','ramsar','0cf90a8c-84fd-4bea-8299-ad56c0d3a463','2015-07-03 11:00:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f',NULL,NULL,2,'2016-03-03 10:22:38'),('95d1ad86-5a21-46a7-a963-cde0d844d0fb','http://www.ramsar.org/node/31101','resolution','active','n/a','ramsar','0cf90a8c-84fd-4bea-8299-ad56c0d3a463','2015-07-03 11:00:00','af2078a9-357d-4b12-8f44-fdd1e63ea63f',NULL,NULL,1,'2015-12-14 17:21:41');
 /*!40000 ALTER TABLE `informea_decisions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -385,11 +394,14 @@ CREATE TABLE `informea_documents` (
   `schemaVersion` varchar(64) NOT NULL,
   `published` datetime DEFAULT NULL COMMENT 'Report publishing date',
   `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `treatyUUID` varchar(64) NOT NULL,
   `thumbnailUrl` varchar(255) DEFAULT NULL COMMENT 'Public HTTP image URL',
   `country` char(2) DEFAULT NULL COMMENT 'ISO 3166-1 code (ex. RO)',
   `displayOrder` int(11) DEFAULT NULL COMMENT 'Order of display when listed',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_documents_treaty` (`treatyUUID`),
+  CONSTRAINT `fk_documents_treaty` FOREIGN KEY (`treatyUUID`) REFERENCES `informea_treaties` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -399,7 +411,7 @@ CREATE TABLE `informea_documents` (
 
 LOCK TABLES `informea_documents` WRITE;
 /*!40000 ALTER TABLE `informea_documents` DISABLE KEYS */;
-INSERT INTO `informea_documents` VALUES ('00cf041a-ac5b-4335-a4cf-0d5d9354015f','1','2008-10-02 12:34:56','cms','http://www.cms.int/sites/default/filespublication/gorilla_0_3_0_0.jpg','RO',1,'2014-06-16 10:05:13'),('30d45d8f-5e9f-4c0d-8c04-c05cf4b0d82d','1','2015-09-02 00:00:00','eurobats','http://www.cms.int/sites/default/filespublication/family guide_0_3_0_0.jpg','DE',2,'2016-04-12 16:56:50'),('a18de716-1fbe-47f2-bd63-524ca9a1b7cd','1','2010-10-02 00:00:00','sharks',NULL,NULL,0,'2015-08-05 15:51:11');
+INSERT INTO `informea_documents` VALUES ('00cf041a-ac5b-4335-a4cf-0d5d9354015f','1','2008-10-02 12:34:56','cms','e9277c8f-114f-49b6-95bd-bc5aba93589f','http://www.cms.int/sites/default/filespublication/gorilla_0_3_0_0.jpg','RO',1,'2014-06-16 10:05:13'),('30d45d8f-5e9f-4c0d-8c04-c05cf4b0d82d','1','2015-09-02 00:00:00','eurobats','166c97dc-ce3b-43b6-8c24-4566359145ab','http://www.cms.int/sites/default/filespublication/family guide_0_3_0_0.jpg','DE',2,'2016-04-12 16:56:50'),('a18de716-1fbe-47f2-bd63-524ca9a1b7cd','1','2010-10-02 00:00:00','sharks','UNKNOWN',NULL,NULL,0,'2015-08-05 15:51:11');
 /*!40000 ALTER TABLE `informea_documents` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -671,6 +683,7 @@ DROP TABLE IF EXISTS `informea_meetings`;
 CREATE TABLE `informea_meetings` (
   `id` varchar(64) NOT NULL DEFAULT '',
   `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `treatyUUID` varchar(64) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
   `start` datetime NOT NULL,
   `end` datetime DEFAULT NULL,
@@ -687,7 +700,9 @@ CREATE TABLE `informea_meetings` (
   `latitude` decimal(12,9) DEFAULT NULL,
   `longitude` decimal(12,9) DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_meetings_treaty` (`treatyUUID`),
+  CONSTRAINT `fk_meetings_treaty` FOREIGN KEY (`treatyUUID`) REFERENCES `informea_treaties` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -697,7 +712,7 @@ CREATE TABLE `informea_meetings` (
 
 LOCK TABLES `informea_meetings` WRITE;
 /*!40000 ALTER TABLE `informea_meetings` DISABLE KEYS */;
-INSERT INTO `informea_meetings` VALUES ('5bdb02b0-debe-4689-852d-9d9a96fd63eb','ramsar','http://www.ramsar.org/node/39893','2012-07-05 22:00:00','2012-07-12 22:00:00',NULL,NULL,'cop',NULL,NULL,NULL,NULL,NULL,NULL,'RO',NULL,NULL,'2016-01-13 15:31:44'),('af2078a9-357d-4b12-8f44-fdd1e63ea63f','ramsar','http://www.ramsar.org/node/23897','2015-05-31 22:00:00','2015-06-08 22:00:00','repetition','kind','cop','access','status','url1','copy1','Punta del Este, Uruguay','city','UY',23.230000000,33.440000000,'2016-01-14 16:26:59');
+INSERT INTO `informea_meetings` VALUES ('5bdb02b0-debe-4689-852d-9d9a96fd63eb','ramsar','0cf90a8c-84fd-4bea-8299-ad56c0d3a463','http://www.ramsar.org/node/39893','2012-07-05 22:00:00','2012-07-12 22:00:00',NULL,NULL,'cop',NULL,NULL,NULL,NULL,NULL,NULL,'RO',NULL,NULL,'2016-01-13 15:31:44'),('af2078a9-357d-4b12-8f44-fdd1e63ea63f','ramsar','0cf90a8c-84fd-4bea-8299-ad56c0d3a463','http://www.ramsar.org/node/23897','2015-05-31 22:00:00','2015-06-08 22:00:00','repetition','kind','cop','access','status','url1','copy1','Punta del Este, Uruguay','city','UY',23.230000000,33.440000000,'2016-01-14 16:26:59');
 /*!40000 ALTER TABLE `informea_meetings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -767,12 +782,15 @@ DROP TABLE IF EXISTS `informea_national_plans`;
 CREATE TABLE `informea_national_plans` (
   `id` varchar(64) NOT NULL DEFAULT '',
   `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `treatyUUID` varchar(64) NOT NULL DEFAULT '',
   `country` char(2) NOT NULL DEFAULT '' COMMENT 'ISO 3166-1 code (ex. RO)',
   `submission` date DEFAULT NULL COMMENT 'Report publishing date',
   `url` varchar(64) NOT NULL DEFAULT '' COMMENT 'HTTP public URL where document is available to view',
   `type` varchar(64) DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_national_plans_treaty` (`treatyUUID`),
+  CONSTRAINT `fk_national_plans_treaty` FOREIGN KEY (`treatyUUID`) REFERENCES `informea_treaties` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -782,7 +800,7 @@ CREATE TABLE `informea_national_plans` (
 
 LOCK TABLES `informea_national_plans` WRITE;
 /*!40000 ALTER TABLE `informea_national_plans` DISABLE KEYS */;
-INSERT INTO `informea_national_plans` VALUES ('4298e0ab-c687-4cbe-b849-f3a16d63284e','stockholm','AL','2007-02-12','http://www.cbd.int/doc/world/ve/ve-nbsap-01-es.pdf','nip','2015-04-22 09:21:43'),('a6f6ecc6-7a39-4aac-b488-f3618fd3d882','stockholm','TZ','2006-06-12','url1','nip','2015-08-28 15:03:50');
+INSERT INTO `informea_national_plans` VALUES ('4298e0ab-c687-4cbe-b849-f3a16d63284e','stockholm','449a478b-fcdb-4981-afee-a7ca2e7fc107','AL','2007-02-12','http://www.cbd.int/doc/world/ve/ve-nbsap-01-es.pdf','nip','2015-04-22 09:21:43'),('a6f6ecc6-7a39-4aac-b488-f3618fd3d882','stockholm','449a478b-fcdb-4981-afee-a7ca2e7fc107','TZ','2006-06-12','url1','nip','2015-08-28 15:03:50');
 /*!40000 ALTER TABLE `informea_national_plans` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -857,11 +875,14 @@ CREATE TABLE `informea_sites` (
   `type` varchar(64) DEFAULT NULL,
   `country` char(2) DEFAULT NULL COMMENT 'ISO 3166-1 code (ex. RO)',
   `treaty` varchar(32) NOT NULL DEFAULT '' COMMENT 'Treaty machine name (See API doc for enumerations)',
+  `treatyUUID` varchar(64) DEFAULT NULL,
   `url` varchar(255) NOT NULL DEFAULT '' COMMENT 'HTTP public URL where document is available to visit',
   `latitude` decimal(12,9) DEFAULT NULL,
   `longitude` decimal(12,9) DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_sites_treaty` (`treatyUUID`),
+  CONSTRAINT `fk_sites_treaty` FOREIGN KEY (`treatyUUID`) REFERENCES `informea_treaties` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -871,7 +892,7 @@ CREATE TABLE `informea_sites` (
 
 LOCK TABLES `informea_sites` WRITE;
 /*!40000 ALTER TABLE `informea_sites` DISABLE KEYS */;
-INSERT INTO `informea_sites` VALUES ('4cbc51ee-1b32-49eb-bbf0-6c7b15d33f0f','whc','AT','whc','http://whc.unesco.org/en/list/1363',47.278333333,8.207500000,'2012-05-14 11:04:45'),('bdf4045a-ecad-42d8-a856-f1e90f0632ec','whc','BR','whc','http://whc.unesco.org/en/list/275',-28.543333330,-54.265833330,'2012-05-14 11:04:45');
+INSERT INTO `informea_sites` VALUES ('4cbc51ee-1b32-49eb-bbf0-6c7b15d33f0f','whc','AT','whc','172de6ec-d3e4-4b84-98df-fbc09e2055c6','http://whc.unesco.org/en/list/1363',47.278333333,8.207500000,'2012-05-14 11:04:45'),('bdf4045a-ecad-42d8-a856-f1e90f0632ec','whc','BR','whc','172de6ec-d3e4-4b84-98df-fbc09e2055c6','http://whc.unesco.org/en/list/275',-28.543333330,-54.265833330,'2012-05-14 11:04:45');
 /*!40000 ALTER TABLE `informea_sites` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -902,6 +923,92 @@ LOCK TABLES `informea_sites_name` WRITE;
 INSERT INTO `informea_sites_name` VALUES ('1','4cbc51ee-1b32-49eb-bbf0-6c7b15d33f0f','en','Prehistoric Pile dwellings around the Alps'),('2','4cbc51ee-1b32-49eb-bbf0-6c7b15d33f0f','es','Kluane / Wrangell-St Elias / Glacier Bay / Tatshenshini-Alsek'),('3','4cbc51ee-1b32-49eb-bbf0-6c7b15d33f0f','fr','Jesuit Missions of the Guaranis Missoes (Brazil)');
 /*!40000 ALTER TABLE `informea_sites_name` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `informea_treaties`
+--
+
+DROP TABLE IF EXISTS `informea_treaties`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `informea_treaties` (
+  `id` varchar(64) NOT NULL DEFAULT '',
+  `uuid` varchar(64) NOT NULL DEFAULT '',
+  `url` varchar(255) NOT NULL DEFAULT '',
+  `treatyWebsiteURL` varchar(255) DEFAULT '',
+  `titleEnglish` varchar(255) DEFAULT NULL,
+  `officialNameEnglish` varchar(255) DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uuid` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `informea_treaties`
+--
+
+LOCK TABLES `informea_treaties` WRITE;
+/*!40000 ALTER TABLE `informea_treaties` DISABLE KEYS */;
+INSERT INTO `informea_treaties` VALUES ('cites','8642d125-1fc7-43a1-bdde-a5a1c3a4bb87','http://informea.org/treaties/cites','http://www.cites.org','CITES','Convention on International Trade Of Endangered Species','2016-06-16 14:11:27'),('cms','e9277c8f-114f-49b6-95bd-bc5aba93589f','http://informea.org/treaties/cms','http://www.cms.int','CMS','The Convention On Migratory Species','2016-06-16 14:07:50'),('eurobats','166c97dc-ce3b-43b6-8c24-4566359145ab','http://informea.org/treaties/eurobats','http://eurobats.org','Eurobats','EUROBATS','2016-06-16 14:20:48'),('ramsar','0cf90a8c-84fd-4bea-8299-ad56c0d3a463','http://informea.org/treaties/ramsar','http://ramsar.org','Ramsar','Ramsar Wetlands','2016-06-16 14:18:30'),('sharks','UNKNOWN','','',NULL,NULL,'2016-06-16 14:27:10'),('stockholm','449a478b-fcdb-4981-afee-a7ca2e7fc107','http://informea.org/treaties/stockholm','http://brs.int','Stockholm','Stockholm Convention','2016-06-16 14:47:46'),('whc','172de6ec-d3e4-4b84-98df-fbc09e2055c6','http://informea.org/treaties/whc','http://whc.unesco.org','WHC','World Heritage Convention','2016-06-16 14:31:41');
+/*!40000 ALTER TABLE `informea_treaties` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `informea_treaties_description`
+--
+
+DROP TABLE IF EXISTS `informea_treaties_description`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `informea_treaties_description` (
+  `id` varchar(64) NOT NULL DEFAULT '',
+  `treaty_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_sites_name` (`treaty_id`),
+  CONSTRAINT `fk_treaties_description` FOREIGN KEY (`treaty_id`) REFERENCES `informea_treaties` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `informea_treaties_description`
+--
+
+LOCK TABLES `informea_treaties_description` WRITE;
+/*!40000 ALTER TABLE `informea_treaties_description` DISABLE KEYS */;
+INSERT INTO `informea_treaties_description` VALUES ('1','cms','en','Description 1'),('2','cms','fr','Description 1 French');
+/*!40000 ALTER TABLE `informea_treaties_description` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `informea_treaties_title`
+--
+
+DROP TABLE IF EXISTS `informea_treaties_title`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `informea_treaties_title` (
+  `id` varchar(64) NOT NULL DEFAULT '',
+  `treaty_id` varchar(64) NOT NULL DEFAULT '',
+  `language` varchar(5) NOT NULL DEFAULT '' COMMENT 'Language code (ex. fr, zh, zh-hans)',
+  `value` text NOT NULL COMMENT 'Localized title',
+  PRIMARY KEY (`id`),
+  KEY `fk_documents_titles` (`treaty_id`),
+  CONSTRAINT `fk_treaties_title` FOREIGN KEY (`treaty_id`) REFERENCES `informea_treaties` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `informea_treaties_title`
+--
+
+LOCK TABLES `informea_treaties_title` WRITE;
+/*!40000 ALTER TABLE `informea_treaties_title` DISABLE KEYS */;
+INSERT INTO `informea_treaties_title` VALUES ('1','cms','en','English Title 1'),('2','cms','fr','French Title 1');
+/*!40000 ALTER TABLE `informea_treaties_title` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -912,4 +1019,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-15 15:06:04
+-- Dump completed on 2016-06-16 17:50:44

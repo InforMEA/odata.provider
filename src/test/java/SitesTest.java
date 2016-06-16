@@ -42,6 +42,7 @@ public class SitesTest {
 
 		assertEquals("AT", row.getCountry());
 		assertEquals("whc", row.getTreaty());
+		assertEquals("172de6ec-d3e4-4b84-98df-fbc09e2055c6", row.getTreatyUUID());
 		assertEquals("whc", row.getType());
 		assertEquals("http://whc.unesco.org/en/list/1363", row.getUrl());
 		assertEquals(new Double(47.278333333), row.getLatitude());

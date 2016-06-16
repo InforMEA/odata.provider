@@ -22,7 +22,7 @@ public class Document {
     private Date published;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date updated;
-//    private String treaty;
+    private String treatyUUID;
     private String thumbnailUrl;
     private String country;
 
@@ -125,5 +125,9 @@ public class Document {
 
     public String getTreaty() {
         return treaty;
+    }
+
+    public String getTreatyUUID() {
+        return treatyUUID;
     }
 }

@@ -45,6 +45,7 @@ public class CountryReportsTest {
 
 		assertEquals("AL", row.getCountry());
 		assertEquals("ramsar", row.getTreaty());
+		assertEquals("0cf90a8c-84fd-4bea-8299-ad56c0d3a463", row.getTreatyUUID());
 		assertEquals("http://www.ramsar.org/node/14398", row.getUrl());
 
 		List<CountryReportTitle> titles = row.getTitles();

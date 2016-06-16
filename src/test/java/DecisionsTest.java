@@ -53,6 +53,7 @@ public class DecisionsTest {
 		assertEquals("active", row.getStatus());
 		assertEquals("1234", row.getNumber());
 		assertEquals("ramsar", row.getTreaty());
+		assertEquals("0cf90a8c-84fd-4bea-8299-ad56c0d3a463", row.getTreatyUUID());
 		assertEquals(new Integer(3), row.getDisplayOrder());
 
 		Calendar c = new GregorianCalendar(2015, 6, 3, 13, 45, 0);

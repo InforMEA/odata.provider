@@ -43,6 +43,7 @@ public class MeetingsTest {
 		Meeting row = em.find(Meeting.class, "af2078a9-357d-4b12-8f44-fdd1e63ea63f");
 
 		assertEquals("ramsar", row.getTreaty());
+		assertEquals("0cf90a8c-84fd-4bea-8299-ad56c0d3a463", row.getTreatyUUID());
 		assertEquals("http://www.ramsar.org/node/23897", row.getUrl());
 
 		Calendar c = new GregorianCalendar(2015, 4, 31, 22, 0, 0);

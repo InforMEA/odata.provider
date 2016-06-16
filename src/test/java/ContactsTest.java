@@ -66,8 +66,10 @@ public class ContactsTest {
 
 		ContactTreaty treaty = treaties.get(0);
 		assertEquals("cites", treaty.getTreaty());
+		assertEquals("8642d125-1fc7-43a1-bdde-a5a1c3a4bb87", treaty.getTreatyUUID());
 		treaty = treaties.get(1);
 		assertEquals("cms", treaty.getTreaty());
+		assertEquals("e9277c8f-114f-49b6-95bd-bc5aba93589f", treaty.getTreatyUUID());
 
 		Calendar c = new GregorianCalendar(2016, 2, 29, 20, 21, 54);
 		assertEquals(c.getTime(), row.getUpdated());

@@ -14,6 +14,7 @@
 					<JPAAttribute name="published">published</JPAAttribute>
 					<JPAAttribute name="updated">updated</JPAAttribute>
 					<JPAAttribute name="treaty">treaty</JPAAttribute>
+					<JPAAttribute name="treatyUUID">treatyUUID</JPAAttribute>
 					<JPAAttribute name="country">country</JPAAttribute>
 					<JPAAttribute name="displayOrder">displayOrder</JPAAttribute>
 					<JPAAttribute name="schemaVersion">schemaVersion</JPAAttribute>
