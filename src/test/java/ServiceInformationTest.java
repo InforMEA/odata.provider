@@ -33,7 +33,7 @@ public class ServiceInformationTest {
 
 	@Test
 	public void testCheckProductUpdates() {
-		String baseDir = "file://" + System.getProperty("user.dir") + "/src/main/webapp/";
+		String baseDir = "http://localhost:8180/informea/";
 		Map<String, Object> data = ServiceInformation.checkProductUpdates(baseDir + "test.needsupdate.api.properties");
 
 		assertTrue((boolean) data.get("needsUpdate"));
