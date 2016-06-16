@@ -17,6 +17,7 @@
 					<JPAAttribute name="country">country</JPAAttribute>
 					<JPAAttribute name="displayOrder">displayOrder</JPAAttribute>
 					<JPAAttribute name="schemaVersion">schemaVersion</JPAAttribute>
+					<JPAAttribute name="content">content</JPAAttribute>
 				</JPAAttributes>
 				<JPARelationships>
 					<JPARelationship name="authors">authors</JPARelationship>
