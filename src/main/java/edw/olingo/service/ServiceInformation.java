@@ -1,5 +1,6 @@
 package edw.olingo.service;
 
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -105,9 +106,22 @@ public class ServiceInformation {
 		String updateUrl = (overrideUpdateUrl == null) ? UPDATE_URL : overrideUpdateUrl;
 		try {
 			URL url = new URL(updateUrl);
-			URLConnection c = url.openConnection();
-			c.setConnectTimeout(4000);
-			java.io.InputStream fis = c.getInputStream();
+			HttpURLConnection.setFollowRedirects(true);
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn.setConnectTimeout(4000);
+			int status = conn.getResponseCode();
+			// Handle redirect
+			if (status != HttpURLConnection.HTTP_OK
+					&& (status == HttpURLConnection.HTTP_MOVED_PERM
+					|| status == HttpURLConnection.HTTP_MOVED_TEMP
+					|| status == HttpURLConnection.HTTP_SEE_OTHER)) {
+				String newUrl = conn.getHeaderField("Location");
+				url = new URL(newUrl);
+				conn.disconnect();
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setConnectTimeout(4000);
+			}
+			java.io.InputStream fis = conn.getInputStream();
 			java.util.Properties props = new java.util.Properties();
 			props.load(fis);
 
