@@ -14,7 +14,9 @@
 					<JPAAttribute name="published">published</JPAAttribute>
 					<JPAAttribute name="updated">updated</JPAAttribute>
 					<JPAAttribute name="treaty">treaty</JPAAttribute>
+					<JPAAttribute name="country">country</JPAAttribute>
 					<JPAAttribute name="displayOrder">displayOrder</JPAAttribute>
+					<JPAAttribute name="schemaVersion">schemaVersion</JPAAttribute>
 				</JPAAttributes>
 				<JPARelationships>
 					<JPARelationship name="authors">authors</JPARelationship>
@@ -29,7 +31,7 @@
 				</JPARelationships>
 			</JPAEntityType>
 			
-			<JPAEntityType name="DocumentDescriptions">
+			<JPAEntityType name="DocumentDescription">
 				<EDMEntityType>DocumentDescription</EDMEntityType>
 				<EDMEntitySet>DocumentDescriptions</EDMEntitySet>
 				<JPAAttributes>
@@ -59,6 +61,88 @@
 					<JPAAttribute name="id">id</JPAAttribute>
 					<JPAAttribute name="language">language</JPAAttribute>
 					<JPAAttribute name="value">value</JPAAttribute>
+				</JPAAttributes>
+				<JPARelationships></JPARelationships>
+			</JPAEntityType>
+
+			<JPAEntityType name="DocumentFile">
+				<EDMEntityType>DocumentFile</EDMEntityType>
+				<EDMEntitySet>DocumentFile</EDMEntitySet>
+				<JPAAttributes>
+					<JPAAttribute name="id">id</JPAAttribute>
+					<JPAAttribute name="url">url</JPAAttribute>
+					<JPAAttribute name="mimeType">mimeType</JPAAttribute>
+					<JPAAttribute name="language">language</JPAAttribute>
+					<JPAAttribute name="filename">filename</JPAAttribute>
+				</JPAAttributes>
+				<JPARelationships />
+			</JPAEntityType>
+
+			<JPAEntityType name="DocumentIdentifier">
+				<EDMEntityType>DocumentIdentifier</EDMEntityType>
+				<EDMEntitySet>DocumentIdentifier</EDMEntitySet>
+				<JPAAttributes>
+					<JPAAttribute name="id">id</JPAAttribute>
+					<JPAAttribute name="name">name</JPAAttribute>
+					<JPAAttribute name="value">value</JPAAttribute>
+				</JPAAttributes>
+				<JPARelationships />
+			</JPAEntityType>
+
+			<JPAEntityType name="DocumentReference">
+				<EDMEntityType>DocumentReference</EDMEntityType>
+				<EDMEntitySet>DocumentReference</EDMEntitySet>
+				<JPAAttributes>
+					<JPAAttribute name="id">id</JPAAttribute>
+					<JPAAttribute name="type">type</JPAAttribute>
+					<JPAAttribute name="refId">refId</JPAAttribute>
+				</JPAAttributes>
+				<JPARelationships />
+			</JPAEntityType>
+
+			<JPAEntityType name="DocumentTag">
+				<EDMEntityType>DocumentTag</EDMEntityType>
+				<EDMEntitySet>DocumentTag</EDMEntitySet>
+				<JPAAttributes>
+					<JPAAttribute name="id">id</JPAAttribute>
+					<JPAAttribute name="language">language</JPAAttribute>
+					<JPAAttribute name="scope">scope</JPAAttribute>
+					<JPAAttribute name="value">value</JPAAttribute>
+					<JPAAttribute name="comment">comment</JPAAttribute>
+				</JPAAttributes>
+				<JPARelationships></JPARelationships>
+			</JPAEntityType>
+
+			<JPAEntityType name="DocumentType">
+				<EDMEntityType>DocumentType</EDMEntityType>
+				<EDMEntitySet>DocumentTypes</EDMEntitySet>
+				<JPAAttributes>
+					<JPAAttribute name="id">id</JPAAttribute>
+					<JPAAttribute name="value">value</JPAAttribute>
+				</JPAAttributes>
+				<JPARelationships></JPARelationships>
+			</JPAEntityType>
+
+			<JPAEntityType name="DocumentAuthor">
+				<EDMEntityType>DocumentAuthor</EDMEntityType>
+				<EDMEntitySet>DocumentAuthors</EDMEntitySet>
+				<JPAAttributes>
+					<JPAAttribute name="id">id</JPAAttribute>
+					<JPAAttribute name="name">name</JPAAttribute>
+					<JPAAttribute name="type">type</JPAAttribute>
+				</JPAAttributes>
+				<JPARelationships></JPARelationships>
+			</JPAEntityType>
+
+			<JPAEntityType name="DocumentKeyword">
+				<EDMEntityType>DocumentKeyword</EDMEntityType>
+				<EDMEntitySet>DocumentKeyword</EDMEntitySet>
+				<JPAAttributes>
+					<JPAAttribute name="id">id</JPAAttribute>
+					<JPAAttribute name="literalForm">literalForm</JPAAttribute>
+					<JPAAttribute name="scope">scope</JPAAttribute>
+					<JPAAttribute name="sourceURL">sourceURL</JPAAttribute>
+					<JPAAttribute name="termURI">termURI</JPAAttribute>
 				</JPAAttributes>
 				<JPARelationships></JPARelationships>
 			</JPAEntityType>

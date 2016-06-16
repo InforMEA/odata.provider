@@ -50,7 +50,7 @@ public class DocumentTest {
         c = new GregorianCalendar(2014, 5, 16, 13, 5, 13);
 		assertEquals(c.getTime(), row.getUpdated());
 
-		assertEquals("pacific-inslands-cetaceans", row.getTreaty());
+		assertEquals("cms", row.getTreaty());
 		assertEquals("http://www.cms.int/sites/default/filespublication/gorilla_0_3_0_0.jpg", row.getThumbnailUrl());
 		assertEquals(new Integer(1), row.getDisplayOrder());
 		assertEquals("RO", row.getCountry());
@@ -101,7 +101,7 @@ public class DocumentTest {
         DocumentKeyword kw = keywords.get(0);
         assertEquals("http://www.ramsar.org/taxonoomy/term/wetland-values", kw.getTermURI());
         assertEquals("ramsar", kw.getScope());
-        assertEquals("Wetland values", kw.getLiteralForm());
+        assertEquals("access right", kw.getLiteralForm());
         assertEquals("http://odata/Term('uri1')", kw.getSourceURL());
 
         List<DocumentReference> references = row.getReferences();
