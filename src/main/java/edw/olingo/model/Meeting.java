@@ -18,10 +18,9 @@ import javax.persistence.TemporalType;
 public class Meeting {
 
 	@Id
-	@Column(name = "id")
 	private String id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 1024)
 	private String treaty;
 	private String url;
 
@@ -42,8 +41,10 @@ public class Meeting {
 	private String imageCopyright;
 	private String location;
 	private String city;
+
 	@Column(nullable = false)
 	private String country;
+
 	private Double latitude;
 	private Double longitude;
 

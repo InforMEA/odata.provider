@@ -1,6 +1,5 @@
 package edw.olingo.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -12,7 +11,6 @@ import javax.persistence.Table;
 @Table(name = "informea_documents_keywords")
 public class DocumentKeyword {
     @Id
-    @Column(name="id")
     private String id;
 
     private Document document;

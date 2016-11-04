@@ -39,14 +39,17 @@ import javax.persistence.TemporalType;
 public class NationalPlan {
 
 	@Id
-	@Column(name = "id")
 	private String id;
-	@Column(nullable = false)
+
+	@Column(nullable = false, length = 1024)
 	private String treaty;
+
 	@Column(nullable = false)
 	private String country;
+
 	@Column(nullable = false)
 	private String type;
+
 	private String url;
 
 	@Temporal(TemporalType.TIMESTAMP)

@@ -38,26 +38,30 @@ import javax.persistence.Temporal;
 public class Decision {
 
 	@Id
-	@Column(name = "id")
 	private String id;
+
 	private String link;
+
 	@Column(nullable = false)
 	private String number;
+
 	@Column(nullable = false)
 	private String status;
+
 	@Column(nullable = false)
 	private String type;
-	@Column(nullable = false)
+
+	@Column(nullable = false, length = 1024)
 	private String treaty;
+
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
 	private Date published;
+
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
 	private Date updated;
-	@Column(name = "meetingId")
+
 	private String meetingId;
-	@Column(name = "meetingTitle")
 	private String meetingTitle;
-	@Column(name = "meetingUrl")
 	private String meetingUrl;
 	private Integer displayOrder;
 

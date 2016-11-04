@@ -33,11 +33,11 @@ import javax.persistence.Table;
 public class DecisionKeyword {
 
 	@Id
-	@Column(name = "id")
 	private String id;
 
 	@SuppressWarnings("unused")
 	private Decision decision;
+
 	private String namespace;
 	private String term;
 

@@ -13,16 +13,19 @@ import java.util.List;
 public class Document {
 
     @Id
-    @Column(name="id")
     private String id;
 
     private Integer displayOrder;
+
     private String schemaVersion;
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date published;
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date updated;
-//    private String treaty;
+
+    // private String treaty;
     private String thumbnailUrl;
     private String country;
 

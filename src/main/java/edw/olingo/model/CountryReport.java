@@ -39,16 +39,17 @@ import javax.persistence.TemporalType;
 public class CountryReport {
 
 	@Id
-	@Column(name = "id")
 	private String id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 1024)
 	private String treaty;
+
 	@Column(nullable = false)
 	private String country;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date submission;
+
 	private String url;
 
 	@Temporal(TemporalType.TIMESTAMP)

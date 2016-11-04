@@ -31,7 +31,6 @@ import javax.persistence.Table;
 public class DecisionTitle {
 
 	@Id
-	@Column(name = "id")
 	private String id;
 
 	@SuppressWarnings("unused")

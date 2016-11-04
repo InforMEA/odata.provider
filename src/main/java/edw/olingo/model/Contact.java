@@ -38,10 +38,11 @@ import javax.persistence.Temporal;
 public class Contact {
 
 	@Id
-	@Column(name = "id")
 	private String id;
+
 	@Column(nullable = false)
 	private String country;
+
 	private String prefix;
 	private String firstName;
 	private String lastName;

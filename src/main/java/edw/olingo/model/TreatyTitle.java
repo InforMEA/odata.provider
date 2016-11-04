@@ -1,6 +1,5 @@
 package edw.olingo.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -10,7 +9,6 @@ import javax.persistence.Table;
 public class TreatyTitle {
 
 	@Id
-	@Column(name = "id")
 	private String id;
 
 	private String language;

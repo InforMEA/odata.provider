@@ -15,19 +15,22 @@ import javax.persistence.Table;
 public class Treaty {
 
 	@Id
-	@Column(name = "id")
 	private String id;
+
 	@Column(nullable = false)
 	private String uuid;
 
 	private String url;
 	private String treatyWebsiteURL;
-	@Column(nullable = false)
+
+	@Column(nullable = false, length = 1024)
 	private String titleEnglish;
+
 	private String officialNameEnglish;
-	
+
 	@OneToMany(mappedBy = "treaty", cascade = CascadeType.ALL)
 	private List<TreatyDescription> descriptions = new ArrayList<TreatyDescription>();
+
 	@OneToMany(mappedBy = "treaty", cascade = CascadeType.ALL)
 	private List<TreatyTitle> titles = new ArrayList<TreatyTitle>();
 

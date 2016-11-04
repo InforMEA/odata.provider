@@ -33,7 +33,6 @@ import javax.persistence.Table;
 public class NationalPlanFile {
 
 	@Id
-	@Column(name = "id")
 	private String id;
 
 	@SuppressWarnings("unused")
@@ -41,10 +40,13 @@ public class NationalPlanFile {
 
 	// private String diskPath;
 	private String url;
+
 	@Column(nullable = false)
 	private String mimeType;
+
 	@Column(nullable = false)
 	private String language;
+
 	private String filename;
 
 	public String getId() {

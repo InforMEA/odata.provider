@@ -33,7 +33,6 @@ import javax.persistence.Table;
 public class DecisionLongTitle {
 
 	@Id
-	@Column(name = "id")
 	private String id;
 
 	@SuppressWarnings("unused")
@@ -41,7 +40,7 @@ public class DecisionLongTitle {
 
 	private String language;
 
-	@Column(name = "long_title")
+	@Column(name = "long_title", length = 1024)
 	private String longTitle;
 
 	public String getLanguage() {
