@@ -51,7 +51,7 @@ Build from source
 =================
 
 * Install the SQL database from src/test/sql/clean.sql
-* mvn package
+* `mvn package` or `mvn -DskipTests=true package` without running the tests
 * Use the war for binary installation
 
 Testing
