@@ -23,10 +23,10 @@
 					<JPARelationship name="authors">authors</JPARelationship>
 					<JPARelationship name="descriptions">descriptions</JPARelationship>
 					<JPARelationship name="files">files</JPARelationship>
-					<JPARelationship name="identifiers">identifier</JPARelationship>
+					<JPARelationship name="identifiers">identifiers</JPARelationship>
 					<JPARelationship name="keywords">keywords</JPARelationship>
 					<JPARelationship name="references">referenceToEntities</JPARelationship>
-					<JPARelationship name="tags">tag</JPARelationship>
+					<JPARelationship name="tags">tags</JPARelationship>
 					<JPARelationship name="titles">titles</JPARelationship>
 					<JPARelationship name="types">types</JPARelationship>
 				</JPARelationships>
