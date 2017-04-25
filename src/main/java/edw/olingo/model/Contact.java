@@ -54,6 +54,7 @@ public class Contact {
 	private String email;
 	private String phoneNumber;
 	private String fax;
+	private Integer gender;
 
 	// primary is a reserved word in MySQL
 	@Column(name = "\"primary\"")
@@ -127,5 +128,13 @@ public class Contact {
 
 	public String getId() {
 		return id;
+	}
+
+	public Integer getGender() {
+		return gender;
+	}
+
+	public void setGender(Integer gender) {
+		this.gender = gender;
 	}
 }

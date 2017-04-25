@@ -444,6 +444,7 @@
 					<JPAAttribute name="primary">primary</JPAAttribute>
 					<JPAAttribute name="updated">updated</JPAAttribute>
 					<JPAAttribute name="type">type</JPAAttribute>
+					<JPAAttribute name="gender">gender</JPAAttribute>
 				</JPAAttributes>
 				<JPARelationships>
 					<JPARelationship name="treaties">treaties</JPARelationship>
