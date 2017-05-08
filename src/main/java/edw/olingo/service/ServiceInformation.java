@@ -2,7 +2,6 @@ package edw.olingo.service;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -91,18 +90,8 @@ public class ServiceInformation {
 		return checkProductUpdates(UPDATE_URL);
 	}
 
-	/**
-	 * Check for toolkit update
-	 * 
-	 * @return Structure containing update information
-	 */
-	@SuppressWarnings("unused")
+
 	public static Map<String, Object> checkProductUpdates(String overrideUpdateUrl) {
-		Map<String, Object> ret = new HashMap<String, Object>();
-		ret.put("needsUpdate", false);
-		ret.put("success", false);
-		ret.put("remoteVersion", "");
-		ret.put("changes", "");
 		String updateUrl = (overrideUpdateUrl == null) ? UPDATE_URL : overrideUpdateUrl;
 		try {
 			URL url = new URL(updateUrl);
@@ -124,7 +113,30 @@ public class ServiceInformation {
 			java.io.InputStream fis = conn.getInputStream();
 			java.util.Properties props = new java.util.Properties();
 			props.load(fis);
+			return compareVersion(props);
+		} catch (Exception ex) {
+			log.log(Level.WARNING, "Cannot check for new version at: " + updateUrl);
+		}
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("needsUpdate", false);
+		ret.put("success", false);
+		ret.put("remoteVersion", "UNKNOWN");
+		ret.put("changes", "-");
+		return ret;
+	}
 
+	/**
+	 * Check for toolkit update
+	 *
+	 * @return Structure containing update information
+	 */
+	public static Map<String, Object> compareVersion(java.util.Properties props) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("needsUpdate", false);
+		ret.put("success", false);
+		ret.put("remoteVersion", "UNKNOWN");
+		ret.put("changes", "-");
+		try {
 			int remoteMajor = Integer.parseInt(props.getProperty("MAJOR"));
 			int remoteMinor = Integer.parseInt(props.getProperty("MINOR"));
 			int remoteRevision = Integer
@@ -132,7 +144,6 @@ public class ServiceInformation {
 			boolean remoteBeta = Boolean
 					.parseBoolean(props.getProperty("BETA"));
 			String changes = props.getProperty("CHANGES");
-
 			boolean needsUpdate = false;
 			if (remoteMajor > VERSION_MAJOR) {
 				needsUpdate = true;
@@ -143,7 +154,7 @@ public class ServiceInformation {
 					if (remoteRevision > VERSION_REVISION) {
 						needsUpdate = true;
 					} else if (remoteRevision == VERSION_REVISION) {
-						if (VERSION_BETA == true && remoteBeta == false) {
+						if (VERSION_BETA && remoteBeta == false) {
 							needsUpdate = true;
 						}
 					}
@@ -155,7 +166,7 @@ public class ServiceInformation {
 			ret.put("success", true);
 			ret.put("changes", changes);
 		} catch (Exception ex) {
-			log.log(Level.WARNING, "Cannot check for new version at: " + updateUrl);
+			log.log(Level.WARNING, "Cannot compare local and remote versions: " + ex.getMessage());
 		}
 		return ret;
 	}

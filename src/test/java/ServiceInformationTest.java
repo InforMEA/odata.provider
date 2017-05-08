@@ -3,6 +3,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
+import java.util.Properties;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,33 +34,84 @@ public class ServiceInformationTest {
 
 	@Test
 	public void testCheckProductUpdates() {
-		String baseDir = "http://localhost:8180/informea/";
-		Map<String, Object> data = ServiceInformation.checkProductUpdates(baseDir + "test.needsupdate.api.properties");
+		Properties remote = getDefaultProperties();
+		// Major version
+		remote.put("MAJOR", "" + (ServiceInformation.VERSION_MAJOR + 1));
+		Map<String, Object> check = ServiceInformation.compareVersion(remote);
+		assertTrue((boolean) check.get("needsUpdate"));
+		assertTrue((boolean) check.get("success"));
+		assertEquals(
+				String.format("%s.%s.%s%s",
+						(ServiceInformation.VERSION_MAJOR + 1),
+						ServiceInformation.VERSION_MINOR,
+						ServiceInformation.VERSION_REVISION,
+						ServiceInformation.VERSION_BETA ? " beta" : ""),
+				check.get("remoteVersion"));
 
-		assertTrue((boolean) data.get("needsUpdate"));
-		assertTrue((boolean) data.get("success"));
-		assertEquals("9.9.1 beta", (String) data.get("remoteVersion"));
-		assertTrue(((String) data.get("changes")).length() > 0);
+		// Minor version
+		remote = getDefaultProperties();
+		remote.put("MINOR", "" + (ServiceInformation.VERSION_MINOR + 1));
+		check = ServiceInformation.compareVersion(remote);
+		assertTrue((boolean) check.get("needsUpdate"));
+		assertTrue((boolean) check.get("success"));
+		assertEquals(
+				String.format("%s.%s.%s%s",
+						ServiceInformation.VERSION_MAJOR,
+						(ServiceInformation.VERSION_MINOR + 1),
+						ServiceInformation.VERSION_REVISION,
+						ServiceInformation.VERSION_BETA ? " beta" : ""),
+				check.get("remoteVersion"));
 
-		data = ServiceInformation.checkProductUpdates(baseDir + "test.updated.api.properties");
-		assertFalse((boolean) data.get("needsUpdate"));
-		assertTrue((boolean) data.get("success"));
-		assertEquals("1.5.3", (String) data.get("remoteVersion"));
-		assertTrue(((String) data.get("changes")).length() > 0);
+		// Revision version
+		remote = getDefaultProperties();
+		remote.put("REVISION", "" + (ServiceInformation.VERSION_REVISION + 1));
+		check = ServiceInformation.compareVersion(remote);
+		assertTrue((boolean) check.get("needsUpdate"));
+		assertTrue((boolean) check.get("success"));
+		assertEquals(
+				String.format("%s.%s.%s%s",
+						ServiceInformation.VERSION_MAJOR,
+						ServiceInformation.VERSION_MINOR,
+						(ServiceInformation.VERSION_REVISION + 1),
+						ServiceInformation.VERSION_BETA ? " beta" : ""),
+				check.get("remoteVersion"));
 
-		data = ServiceInformation.checkProductUpdates(baseDir + "test.needsupdate.major.api.properties");
-		assertTrue((boolean) data.get("needsUpdate"));
-		assertTrue((boolean) data.get("success"));
-		assertEquals("3.0.0", (String) data.get("remoteVersion"));
-		assertTrue(((String) data.get("changes")).length() > 0);
+		remote = getDefaultProperties();
+		if (ServiceInformation.VERSION_BETA) {
+			remote.put("BETA", "false");
+			check = ServiceInformation.compareVersion(remote);
+			assertTrue((boolean) check.get("needsUpdate"));
+			assertTrue((boolean) check.get("success"));
+			assertEquals(
+					String.format("%s.%s.%s%s",
+							ServiceInformation.VERSION_MAJOR,
+							ServiceInformation.VERSION_MINOR,
+							ServiceInformation.VERSION_REVISION,
+							""),
+					check.get("remoteVersion"));
+		}
+		else {
+			remote.put("BETA", "true");
+			check = ServiceInformation.compareVersion(remote);
+			assertFalse((boolean) check.get("needsUpdate"));
+			assertTrue((boolean) check.get("success"));
+			assertEquals(
+					String.format("%s.%s.%s%s",
+							ServiceInformation.VERSION_MAJOR,
+							ServiceInformation.VERSION_MINOR,
+							(ServiceInformation.VERSION_REVISION + 1),
+							" beta"),
+					check.get("remoteVersion"));
+		}
+}
 
-		data = ServiceInformation.checkProductUpdates(baseDir + "test.needsupdate.minor.api.properties");
-		assertTrue((boolean) data.get("needsUpdate"));
-		assertTrue((boolean) data.get("success"));
-		assertEquals("2.9.0", (String) data.get("remoteVersion"));
-		assertTrue(((String) data.get("changes")).length() > 0);
-
-		data = ServiceInformation.checkProductUpdates("http://malformed.url/");
-		assertFalse((boolean) data.get("success"));
+	private static Properties getDefaultProperties() {
+		Properties remote = new Properties();
+		remote.put("MAJOR", "" + ServiceInformation.VERSION_MAJOR);
+		remote.put("MINOR", "" + ServiceInformation.VERSION_MINOR);
+		remote.put("REVISION", "" + ServiceInformation.VERSION_REVISION);
+		remote.put("BETA", "" + ServiceInformation.VERSION_BETA);
+		remote.put("CHANGES", "Test string");
+		return remote;
 	}
 }

@@ -60,6 +60,6 @@ Testing
 To run tests:
 
 1. Create a database called `informea_odata_test`
-2. Edit _persistence.xml_ and configure the connection details for _persistence_unit_test_ at the bottom of the page
-3. Edit the pom.xml and configure database connection in the _test database configuration_ section 
+2. Edit _persistence.xml_ and configure the connection details for _persistence_unit_test_ at the bottom of the page (username, password, host, etc.)
+3. Edit the pom.xml and configure database connection in the _test database configuration_ section
 4. Execute the tests with ```mvn sql:execute test```
