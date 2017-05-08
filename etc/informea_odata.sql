@@ -503,8 +503,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     LEFT JOIN `informea_drupal`.field_data_field_sorting_order so ON so.entity_id = a.nid
 
     LEFT JOIN `informea_drupal`.field_data_field_country cou ON cou.entity_id = a.nid
-    INNER JOIN `informea_drupal`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
-    INNER JOIN `informea_drupal`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
+    LEFT JOIN `informea_drupal`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
+    LEFT JOIN `informea_drupal`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
 
     INNER JOIN `informea_drupal`.node treaty ON treaty.nid = b.field_treaty_target_id
   WHERE
