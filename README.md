@@ -63,3 +63,44 @@ To run tests:
 2. Edit _persistence.xml_ and configure the connection details for _persistence_unit_test_ at the bottom of the page (username, password, host, etc.)
 3. Edit the pom.xml and configure database connection in the _test database configuration_ section
 4. Execute the tests with ```mvn sql:execute test```
+
+
+Configuration
+=============
+
+The current list of SQL views part of the toolkit:
+
+* informea_contacts
+* informea_contacts_treaties
+* informea_country_reports
+* informea_country_reports_documents
+* informea_country_reports_title
+* informea_decisions
+* informea_decisions_content
+* informea_decisions_documents
+* informea_decisions_keywords
+* informea_decisions_longtitle
+* informea_decisions_summary
+* informea_decisions_title
+* informea_documents
+* informea_documents_authors
+* informea_documents_description
+* informea_documents_files
+* informea_documents_identifiers
+* informea_documents_keywords
+* informea_documents_references
+* informea_documents_tags
+* informea_documents_title
+* informea_documents_treaties
+* informea_documents_types
+* informea_meetings
+* informea_meetings_description
+* informea_meetings_title
+* informea_national_plans
+* informea_national_plans_documents
+* informea_national_plans_title
+* informea_sites
+* informea_sites_name
+* informea_treaties
+* informea_treaties_description
+* informea_treaties_title
