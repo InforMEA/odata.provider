@@ -55,7 +55,7 @@ public class DecisionsTest {
 		assertEquals("ramsar", row.getTreaty());
 		assertEquals(new Integer(3), row.getDisplayOrder());
 
-		Calendar c = new GregorianCalendar(2015, 6, 3, 13, 45, 0);
+		Calendar c = new GregorianCalendar(2015, 6, 3, 10, 45, 0);
 		assertEquals(c.getTime(), row.getPublished());
 
 		assertEquals("af2078a9-357d-4b12-8f44-fdd1e63ea63f", row.getMeetingId());
@@ -79,7 +79,7 @@ public class DecisionsTest {
 		assertEquals("meeting1", row.getMeetingTitle());
 		assertEquals("http://chm.pops.int/linkclick.aspx?link=404&amp;amp;tabid=276&amp;amp;language=en-us", row.getMeetingUrl());
 
-		c = new GregorianCalendar(2015, 11, 14, 19, 21, 55);
+		c = new GregorianCalendar(2015, 11, 14, 17, 21, 55);
 		assertEquals(c.getTime(), row.getUpdated());
 
 		DecisionSummary summary = row.getSummaries().get(0);

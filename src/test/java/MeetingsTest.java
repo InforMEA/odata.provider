@@ -64,7 +64,7 @@ public class MeetingsTest {
 		assertEquals(new Double(23.230000000), row.getLatitude());
 		assertEquals(new Double(33.440000000), row.getLongitude());
 
-		c = new GregorianCalendar(2016, 0, 14, 18, 26, 59);
+		c = new GregorianCalendar(2016, 0, 14, 16, 26, 59);
 		assertEquals(c.getTime(), row.getUpdated());
 
 		MeetingDescription description = row.getDescriptions().get(0);

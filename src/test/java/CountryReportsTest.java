@@ -59,7 +59,7 @@ public class CountryReportsTest {
 		Calendar c = new GregorianCalendar(2012, 0, 1, 0, 0, 0);
 		assertEquals(c.getTime(), row.getSubmission());
 
-		c = new GregorianCalendar(2015, 04, 27, 11, 07, 01);
+		c = new GregorianCalendar(2015, 04, 27, 8, 07, 01);
 		assertEquals(c.getTime(), row.getUpdated());
 
 		List<CountryReportFile> files = row.getFiles();

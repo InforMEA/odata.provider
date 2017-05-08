@@ -60,7 +60,7 @@ public class NationalPlansTest {
 		Calendar c = new GregorianCalendar(2007, 1, 12);
 		assertEquals(c.getTime(), row.getSubmission());
 
-		c = new GregorianCalendar(2015, 3, 22, 12, 21, 43);
+		c = new GregorianCalendar(2015, 3, 22, 9, 21, 43);
 		assertEquals(c.getTime(), row.getUpdated());
 
 		em.close();

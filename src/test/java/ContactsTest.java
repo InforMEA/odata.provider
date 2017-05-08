@@ -69,7 +69,7 @@ public class ContactsTest {
 		treaty = treaties.get(1);
 		assertEquals("cms", treaty.getTreaty());
 
-		Calendar c = new GregorianCalendar(2016, 2, 29, 20, 21, 54);
+		Calendar c = new GregorianCalendar(2016, 2, 29, 17, 21, 54);
 		assertEquals(c.getTime(), row.getUpdated());
 
 		em.close();

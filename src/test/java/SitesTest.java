@@ -59,7 +59,7 @@ public class SitesTest {
 		assertEquals("Jesuit Missions of the Guaranis Missoes (Brazil)", name.getName());
 		assertEquals("fr", name.getLanguage());
 
-		GregorianCalendar c = new GregorianCalendar(2012, 4, 14, 14, 4, 45);
+		GregorianCalendar c = new GregorianCalendar(2012, 4, 14, 11, 4, 45);
 		assertEquals(c.getTime(), row.getUpdated());
 
 		em.close();
