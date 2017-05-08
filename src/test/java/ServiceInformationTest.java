@@ -47,6 +47,7 @@ public class ServiceInformationTest {
 						ServiceInformation.VERSION_REVISION,
 						ServiceInformation.VERSION_BETA ? " beta" : ""),
 				check.get("remoteVersion"));
+		assertEquals("Test string", check.get("changes"));
 
 		// Minor version
 		remote = getDefaultProperties();
