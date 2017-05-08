@@ -15,7 +15,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     -- INNER JOIN field_data_field_data_source src ON src.entity_id = a.nid
     LEFT JOIN `informea_drupal`.field_data_field_official_name d  ON d.entity_id = a.nid
   WHERE
-	-- src.field_data_source_tid = 815
+	-- src.field_data_source_tid = 815 -- resolved through field_odata_identifier
 	-- Do not publish 'special' treaties
 	a.nid NOT IN (316, 302, 282, 301, 267)
     AND a.`TYPE` = 'treaty'
@@ -147,6 +147,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     n2.title AS meetingTitle,
     urlm.field_url_url AS meetingUrl,
     FROM_UNIXTIME(a.changed) AS updated,
+    so.field_sorting_order_value AS displayOrder,
     a.nid AS nid
   FROM
     `informea_drupal`.node a
@@ -172,6 +173,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
 
     LEFT JOIN `informea_drupal`.field_data_field_last_update upd ON upd.entity_id = a.nid
     INNER JOIN `informea_drupal`.node treaty ON b.entity_id = treaty.nid
+
+    LEFT JOIN `informea_drupal`.field_data_field_sorting_order so ON so.entity_id = a.nid
   WHERE 
       a.`type` = 'decision'
       AND a.status = 1
@@ -570,7 +573,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     CAST(concat(a.ID, '-', b.`language`) AS CHAR) AS `id`,
     CAST(a.ID AS CHAR) AS document_id,
     b.language AS `language`,
-    b.title_field_value AS title
+    b.title_field_value AS value
   FROM `informea_documents` a
     INNER JOIN `informea_drupal`.field_data_title_field b ON b.entity_id = a.nid;
 
@@ -583,8 +586,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     CONCAT(a.id, '-', c.`language`) AS `id`,
     CAST(a.id AS CHAR) AS document_id,
     c.language AS `language`,
-    c.body_value AS description,
-    c.entity_id
+    c.body_value AS value
   FROM `informea_documents` a
     INNER JOIN `informea_drupal`.field_data_body c ON a.nid = c.entity_id
   WHERE c.body_value IS NOT NULL AND c.body_value <> ''
@@ -645,6 +647,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
   SELECT
       NULL AS `id`,
       NULL AS document_id,
+      NULL AS type,
       NULL AS refId
     FROM DUAL;
 

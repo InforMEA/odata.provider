@@ -113,7 +113,7 @@
 						<c:if test="${countTreaties == 0}">n/a</c:if></td>
 					<td>&nbsp; <c:if test="${countTreaties > 0}">
 							<a target="_blank" title="Click to see the entities. Open in new tab" 
-								href="informea.svc/Treaties?$top=10&$skip=0">View first 10</a></c:if>
+								href="informea.svc/Treaties">View all</a></c:if>
 					</td>
 					<td class="hidden-xs">&nbsp;</td>
 				</tr>
@@ -123,7 +123,7 @@
 						<c:if test="${countMeetings == 0}">n/a</c:if></td>
 					<td>&nbsp; <c:if test="${countMeetings > 0}">
 							<a target="_blank" title="Click to see the entities. Open in new tab" 
-								href="informea.svc/Meetings?$top=10&$skip=0">View first 10</a></c:if>
+								href="informea.svc/Meetings?$top=5&$skip=0&$expand=description,title&$orderby=updated%20desc">View most recently updated 5</a></c:if>
 					</td>
 					<td class="hidden-xs">&nbsp;</td>
 				</tr>
@@ -132,7 +132,7 @@
 					<td><c:if test="${countDecisions > 0}">${countDecisions}</c:if> <c:if test="${countDecisions == 0}">n/a</c:if></td>
 					<td>&nbsp; <c:if test="${countDecisions > 0}">
 							<a target="_blank" title="Click to see the entities. Open in new tab"
-								href="informea.svc/Decisions?$top=10&$skip=0">View first 10</a>
+								href="informea.svc/Decisions?$top=5&$skip=0&$expand=content,files,keywords,longTitle,summary,title&$orderby=updated%20desc">View most recently updated 5</a>
 						</c:if>
 					</td>
 					<td class="hidden-xs">&nbsp;</td>
@@ -142,7 +142,7 @@
 					<td><c:if test="${countContacts > 0}">${countContacts}</c:if> <c:if test="${countContacts == 0}">n/a</c:if></td>
 					<td>&nbsp; <c:if test="${countContacts > 0}">
 							<a target="_blank" title="Click to see the entities. Open in new tab"
-								href="informea.svc/Contacts?$top=10&$skip=0">View first 10</a>
+								href="informea.svc/Contacts?$top=5&$skip=0&$expand=treaties&$orderby=updated%20desc">View most recently updated 5</a>
 						</c:if>
 					</td>
 					<td class="hidden-xs">&nbsp;</td>
@@ -152,7 +152,7 @@
 					<td><c:if test="${countCountryReports > 0}">${countCountryReports}</c:if> <c:if test="${countCountryReports == 0}">n/a</c:if></td>
 					<td>&nbsp; <c:if test="${countCountryReports > 0}">
 							<a target="_blank" title="Click to see the entities. Open in new tab"
-								href="informea.svc/CountryReports?$top=10&$skip=0">View first 10</a>
+								href="informea.svc/CountryReports?$top=5&$skip=0&$expand=files,title&$orderby=updated%20desc">View most recently updated 5</a>
 						</c:if>
 					</td>
 					<td class="hidden-xs">&nbsp;</td>
@@ -162,7 +162,7 @@
 					<td><c:if test="${countNationalPlans > 0}">${countNationalPlans}</c:if> <c:if test="${countNationalPlans == 0}">n/a</c:if></td>
 					<td>&nbsp; <c:if test="${countNationalPlans > 0}">
 							<a target="_blank" title="Click to see the entities. Open in new tab"
-								href="informea.svc/NationalPlans?$top=10&$skip=0">View first 10</a>
+								href="informea.svc/NationalPlans?$top=5&$skip=0&$expand=files,title&$orderby=updated%20desc">View most recently updated 5</a>
 						</c:if>
 					</td>
 					<td class="hidden-xs">&nbsp;</td>
@@ -172,7 +172,7 @@
 					<td><c:if test="${countSites > 0}">${countSites}</c:if><c:if test="${countSites == 0}">n/a</c:if></td>
 					<td>&nbsp; <c:if test="${countSites > 0}">
 							<a target="_blank" title="Click to see the entities. Open in new tab"
-								href="informea.svc/Sites?$top=10&$skip=0">View first 10</a>
+								href="informea.svc/Sites?$top=5&$skip=0&$expand=name&$orderby=updated%20desc">View most recently updated 5</a>
 							<br />
 						</c:if>
 					</td>
@@ -186,7 +186,7 @@
 					<td><c:if test="${countDocuments > 0}">${countDocuments}</c:if> <c:if test="${countDocuments == 0}">n/a</c:if></td>
 					<td>&nbsp; <c:if test="${countDocuments > 0}">
 						<a target="_blank" title="Click to see the entities. Open in new tab"
-						   href="informea.svc/Documents?$top=10&$skip=0">View first 10</a>
+						   href="informea.svc/Documents?$top=5&$skip=0&$expand=authors,types,treaties,title,tags,referenceToEntities,keywords,identifiers,files,description&$orderby=updated%20desc">View most recently updated 5</a>
 					</c:if>
 					</td>
 					<td class="hidden-xs">&nbsp;</td>
