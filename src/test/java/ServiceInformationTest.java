@@ -104,6 +104,12 @@ public class ServiceInformationTest {
 							" beta"),
 					check.get("remoteVersion"));
 		}
+		
+		// Revision version
+		remote = new Properties();
+		check = ServiceInformation.compareVersion(remote);
+		assertFalse((boolean) check.get("success"));
+
 }
 
 	private static Properties getDefaultProperties() {
