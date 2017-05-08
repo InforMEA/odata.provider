@@ -12,7 +12,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     `informea_drupal`.node a
     INNER JOIN `informea_drupal`.field_data_field_odata_identifier c ON a.nid = c.entity_id
     LEFT JOIN `informea_drupal`.field_data_field_treaty_website_url url ON url.entity_id = a.nid
-    -- INNER JOIN `informea_drupal`.field_data_field_data_source src ON src.entity_id = a.nid
+    -- INNER JOIN field_data_field_data_source src ON src.entity_id = a.nid
     LEFT JOIN `informea_drupal`.field_data_field_official_name d  ON d.entity_id = a.nid
   WHERE
 	-- src.field_data_source_tid = 815
@@ -199,7 +199,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.body_value AS content
   FROM `informea_decisions` a
     INNER JOIN `informea_drupal`.field_data_body c ON a.nid = c.entity_id
-  WHERE c.body_value IS NOT NULL AND TRIM(c.body_value) <> '';
+  WHERE
+    c.body_value IS NOT NULL AND TRIM(c.body_value) <> '';
 
 -- informea_decisions_documents
 CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_documents` AS
@@ -244,7 +245,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.body_summary AS summary
   FROM `informea_decisions` a
     INNER JOIN `informea_drupal`.field_data_body c ON a.nid = c.entity_id
-  WHERE c.body_summary IS NOT NULL AND TRIM(c.body_summary) <> '';
+  WHERE
+    c.body_summary IS NOT NULL AND TRIM(c.body_summary) <> '';
   
 -- COUNTRY REPORTS (National Reports)
 
@@ -470,3 +472,193 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.title_field_value AS `name`
   FROM `informea_sites` a 
     INNER JOIN `informea_drupal`.field_data_title_field c ON a.nid = c.entity_id;
+
+
+-- DOCUMENTS ENTITY
+
+--
+-- informea_documents
+--
+DROP TABLE IF EXISTS informea_documents;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents` AS
+  SELECT
+    1 schemaversion,
+    a.uuid AS `id`,
+    dp.field_sorting_date_value AS published,
+    FROM_UNIXTIME(a.changed) `updated`,
+    c.field_odata_identifier_value AS treaty,
+    NULL AS thumbnailUrl,
+    so.field_sorting_order_value AS displayOrder,
+    iso2.field_country_iso2_value AS country,
+    a.nid
+  FROM
+    `informea_drupal`.node a
+    INNER JOIN `informea_drupal`.field_data_field_treaty b ON b.entity_id = a.nid
+    INNER JOIN `informea_drupal`.field_data_field_odata_identifier c ON c.entity_id = b.field_treaty_target_id
+
+    LEFT JOIN `informea_drupal`.field_data_field_sorting_date dp ON dp.entity_id = a.nid
+    LEFT JOIN `informea_drupal`.field_data_field_sorting_order so ON so.entity_id = a.nid
+
+    LEFT JOIN `informea_drupal`.field_data_field_country cou ON cou.entity_id = a.nid
+    INNER JOIN `informea_drupal`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
+    INNER JOIN `informea_drupal`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
+
+    INNER JOIN `informea_drupal`.node treaty ON treaty.nid = b.field_treaty_target_id
+  WHERE
+    a.`type` = 'document'
+    AND a.status = 1
+    AND treaty.status = 1
+    -- Do not publish 'special' treaties
+    AND b.field_treaty_target_id NOT IN (316, 302, 282, 301, 267)
+  GROUP BY a.nid;
+
+--
+-- Documents `type` navigation property
+--
+DROP TABLE IF EXISTS informea_documents_types;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents_types` AS
+  SELECT
+    CONCAT(a.id, '-', t.tid) AS id,
+    a.id document_id,
+    t.name AS `value`
+  FROM informea_documents a
+    INNER JOIN `informea_drupal`.field_data_field_document_type dt ON (a.nid = dt.entity_id AND dt.bundle = 'document')
+    INNER JOIN `informea_drupal`.taxonomy_term_data t on dt.field_document_type_tid = t.tid
+  GROUP BY a.id, t.tid;
+
+--
+-- Documents `authors` navigation property
+--
+DROP TABLE IF EXISTS informea_documents_authors;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents_authors` AS
+  SELECT
+    CONCAT(a.nid, '-', bt.tid) id,
+    a.id AS document_id,
+    NULL `type`,
+    btn.name_field_value AS name
+  FROM informea_documents a
+    INNER JOIN `informea_drupal`.field_data_field_document_authors b ON b.entity_id = a.nid
+    INNER JOIN `informea_drupal`.taxonomy_term_data bt ON bt.tid = b.field_document_authors_tid
+    INNER JOIN `informea_drupal`.field_data_name_field btn ON btn.entity_id = bt.tid
+  GROUP BY a.nid, bt.tid;
+
+--
+-- Documents `keywords` navigation property
+--
+DROP TABLE IF EXISTS informea_documents_keywords;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents_keywords` AS
+  SELECT
+    CONCAT(a.nid, '-', kwt.tid) AS id,
+    a.id document_id,
+    uri.field_taxonomy_term_uri_url AS `termuri`,
+    'leo' AS `scope`,
+    kwn.name_field_value AS literalForm,
+    CONCAT('https://www.informea.org/taxonomy/term/', kwt.tid) AS sourceURL
+  FROM informea_documents a
+    INNER JOIN `informea_drupal`.field_data_field_informea_tags kw ON kw.entity_id = a.nid
+    INNER JOIN `informea_drupal`.taxonomy_term_data kwt ON kwt.tid = kw.field_informea_tags_tid
+    INNER JOIN `informea_drupal`.field_data_name_field kwn ON kwn.entity_id = kwt.tid
+    INNER JOIN `informea_drupal`.field_data_field_taxonomy_term_uri uri ON uri.entity_id = kwt.tid
+  GROUP BY a.nid, kwt.tid;
+
+--
+-- Documents `title` navigation property
+--
+DROP TABLE IF EXISTS informea_documents_title;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents_title` AS
+  SELECT
+    CAST(concat(a.ID, '-', b.`language`) AS CHAR) AS `id`,
+    CAST(a.ID AS CHAR) AS document_id,
+    b.language AS `language`,
+    b.title_field_value AS title
+  FROM `informea_documents` a
+    INNER JOIN `informea_drupal`.field_data_title_field b ON b.entity_id = a.nid;
+
+--
+-- Documents `description` navigation property
+--
+DROP TABLE IF EXISTS informea_documents_description;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents_description` AS
+  SELECT
+    CONCAT(a.id, '-', c.`language`) AS `id`,
+    CAST(a.id AS CHAR) AS document_id,
+    c.language AS `language`,
+    c.body_value AS description,
+    c.entity_id
+  FROM `informea_documents` a
+    INNER JOIN `informea_drupal`.field_data_body c ON a.nid = c.entity_id
+  WHERE c.body_value IS NOT NULL AND c.body_value <> ''
+    ORDER BY a.nid;
+
+--
+-- Documents `identifiers` navigation property
+-- @todo
+--
+DROP TABLE IF EXISTS informea_documents_identifiers;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents_identifiers` AS
+  SELECT
+    NULL `id`,
+    NULL document_id,
+    NULL `name`,
+    NULL `value`
+  FROM `informea_documents` a
+    INNER JOIN `informea_drupal`.field_data_field_document_identifiers b ON b.entity_id = a.nid;
+
+--
+-- Documents `files` navigation property
+--
+DROP TABLE IF EXISTS informea_documents_files;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents_files` AS
+  SELECT
+    CONCAT(a.nid, '-', d.language) AS id,
+    a.id AS document_id,
+    CONCAT('http://www.informea.org/sites/default/files/', REPLACE(fm.uri, 'public://', '')) AS url,
+    NULL AS content,
+    fm.filemime AS mimeType,
+    d.language,
+    fm.filename AS filename
+  FROM `informea_documents` a
+    INNER JOIN `informea_drupal`.field_data_field_files d ON d.entity_id = a.nid
+    INNER JOIN `informea_drupal`.file_managed fm ON fm.fid = d.field_files_fid;
+
+--
+-- Documents `tags` navigation property
+-- @todo:
+--
+DROP TABLE IF EXISTS informea_documents_tags;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents_tags` AS
+  SELECT
+    NULL `id`,
+    NULL `document_id`,
+    NULL `language`,
+    NULL `scope`,
+    NULL `value`,
+    NULL `comment`
+  FROM DUAL;
+
+--
+-- Documents `referenceToEntities` navigation property
+-- @todo:
+--
+DROP TABLE IF EXISTS informea_documents_references;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents_references` AS
+  SELECT
+      NULL AS `id`,
+      NULL AS document_id,
+      NULL AS refId
+    FROM DUAL;
+
+--
+-- Documents `treaties` navigation property
+-- @todo:
+--
+DROP TABLE IF EXISTS informea_documents_treaties;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents_treaties` AS
+  SELECT
+    CONCAT(a.nid, '-', t.field_treaty_target_id) id,
+    a.id AS document_id,
+    o.field_odata_identifier_value AS treaty
+  FROM informea_documents a
+    INNER JOIN `informea_drupal`.field_data_field_treaty t ON t.entity_id = a.nid
+    INNER JOIN `informea_drupal`.field_data_field_odata_identifier o ON o.entity_id = t.field_treaty_target_id
+  GROUP BY a.nid, t.field_treaty_target_id;

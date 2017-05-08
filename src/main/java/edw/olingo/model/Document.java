@@ -30,8 +30,10 @@ public class Document {
     private String country;
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
-    private List<DocumentAuthor> authors = new ArrayList<>();
+    private List<DocumentTreaty> treaties = new ArrayList<>();
 
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    private List<DocumentAuthor> authors = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
     private List<DocumentDescription> descriptions = new ArrayList<>();
@@ -126,7 +128,12 @@ public class Document {
         return titles;
     }
 
+    public List<DocumentTreaty> getTreaties() {
+        return treaties;
+    }
+
     public String getTreaty() {
         return treaty;
     }
+
 }

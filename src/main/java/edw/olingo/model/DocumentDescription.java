@@ -8,7 +8,7 @@ import javax.persistence.Table;
  * Created by miahi on 5/13/2016.
  */
 @Entity
-@Table(name = "informea_documents_descriptions")
+@Table(name = "informea_documents_description")
 public class DocumentDescription {
 
     @Id
