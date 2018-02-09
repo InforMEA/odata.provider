@@ -17,6 +17,8 @@ Prerequisites
 
 * Java 1.7 (not tested with 1.8)
 * Apache Tomcat 7.x
+* Hardware requirements: The minimum hardware requirements are specific to [Java & Apache Tomcat hosting the toolkit](https://java.com/en/download/help/sysreq.xml), in terms of RAM allocated to the Java VM we recommend **512 MB** but that depends on the dataset size and might need tweaking.
+* Sofware requirements: No specific requirements, we recommend CentOS Linux. Please consult the Java requirements above.
 
 Binary installation
 ===================
