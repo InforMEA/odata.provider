@@ -1,2 +1,6 @@
 target/
 WebContent/
+.DS_Store
+.idea
+nb-configuration.xml
+odata.provider.iml
