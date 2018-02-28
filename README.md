@@ -1,5 +1,4 @@
-odata.provider
-==============
+# OData provider
 
 [![Build Status](http://ci.edw.ro/buildStatus/icon?job=informea.odata.provider)](http://ci.edw.ro/job/informea.odata.provider/)
 
@@ -12,21 +11,133 @@ The 2.0 version features:
 * New implementation based on the Apache Olingo library
 * Amendments added to the API specification for data structures (ie File entity)
 
-Prerequisites
-=============
+## Prerequisites
 
 * Java 1.7 (not tested with 1.8)
 * Apache Tomcat 7.x
 * Hardware requirements: The minimum hardware requirements are specific to [Java & Apache Tomcat hosting the toolkit](https://java.com/en/download/help/sysreq.xml), in terms of RAM allocated to the Java VM we recommend **512 MB** but that depends on the dataset size and might need tweaking.
 * Sofware requirements: No specific requirements, we recommend CentOS Linux. Please consult the Java requirements above.
 
-Binary installation
-===================
+## Binary installation
 
-* Configure the database views
+
+### Step 1. Create the database views
+
+Once setup the toolkit is looking for each entity it needs to list (i.e. Decisions, Meetings) and it is querying the target database, looking for some database views/tables with a pre-defined naming. Those views are queries and the information is extracted for each rown then serialized into XML or JSON. 
+
+Considering that each MEA is storing the data into its own system with a custom database structure, in order to make the toolkit reusable for any MEA, instead of selecting the data from the underlying custom database tables - it actually selects the data from standard database views, which themselves are created as site-specific queries at this stage. This way, the database views have uderlying site-specific custom queries - while their structure is well-known to the persistence layer.
+
+Conceptual diagram showing a request:
+
+```
+Internet request => Request processor => JPA/JDBC Query => DB views => DB tables => Response serializer (XML/JSON) => Client
+```
 
 > * see doc/ directory for deployment guidelines
 > * src/test/sql/clean.sql has sample data.
+
+Here are some examples on how to create the database views for a Drupal 7 deployment
+
+```SQL
+CREATE OR REPLACE VIEW `informea_decisions` AS
+  SELECT
+    a.uuid                                                     AS id,
+    CONCAT('http://www.mea.org/node/', a.nid)                  AS link,
+    CASE b1.name WHEN 'resolutions' THEN 'resolution'
+      WHEN 'recommendations' THEN 'recommendation'
+      ELSE 'decision'
+    END                                                        AS `type`,
+    'Adopted'                                                  AS `status`,
+    d.field_document_number_value                              AS number,
+    lower(e1.title)                                            AS treaty,
+    f.field_document_publish_date_value                        AS published,
+    date_format(from_unixtime(a.created), '%Y-%m-%d %H:%i:%s') AS updated,
+    g.id_meeting                                               AS meetingId,
+    NULL                                                       AS meetingTitle,
+    NULL                                                       AS meetingUrl,
+    dg.weight                                                  AS displayOrder,
+    a.nid
+  FROM node a
+    INNER JOIN field_data_field_document_type b ON b.entity_id = a.nid
+    INNER JOIN taxonomy_term_data b1 ON b.field_document_type_tid = b1.tid
+    INNER JOIN field_data_field_document_number d ON d.entity_id = a.nid
+    INNER JOIN field_data_field_instrument e ON e.entity_id = a.nid
+    INNER JOIN node e1 ON e.field_instrument_target_id = e1.nid
+    INNER JOIN field_data_field_document_publish_date f ON f.entity_id = a.nid
+    INNER JOIN informea_decisions_cop_documents g ON g.id_document = a.nid
+    LEFT JOIN draggableviews_structure dg ON (dg.view_name = 'meeting_documents_list_reorder' AND dg.entity_id = a.nid)
+  WHERE
+    a.`type` = 'document'
+    AND LOWER(b1.name) IN ('resolution', 'resolutions', 'recommendation', 'recommendations')
+  GROUP BY a.uuid;
+
+-- informea_decisions_content
+CREATE OR REPLACE VIEW `informea_decisions_content` AS
+  SELECT
+    NULL AS id,
+    NULL AS decision_id,
+    NULL AS `language`,
+    NULL AS content
+  LIMIT 0;
+
+
+-- informea_decisions_documents
+CREATE OR REPLACE VIEW `informea_decisions_documents` AS
+  SELECT
+    CONCAT(a.uuid, '-', f2.fid)                                                         AS id,
+    a.uuid                                                                              AS decision_id,
+    CONCAT('http://www.mea.org/sites/default/files/', REPLACE(f2.uri, 'public://', '')) AS url,
+    f2.filemime                                                                         AS mimeType,
+    f1.`language`                                                                       AS language,
+    f2.filename                                                                         AS filename
+  FROM node a
+    INNER JOIN field_data_field_document_type b ON b.entity_id = a.nid
+    INNER JOIN taxonomy_term_data b1 ON b.field_document_type_tid = b1.tid
+    INNER JOIN field_data_field_document_number d ON d.entity_id = a.nid
+    INNER JOIN field_data_field_instrument e ON e.entity_id = a.nid
+    INNER JOIN node e1 ON e.field_instrument_target_id = e1.nid
+    INNER JOIN field_data_field_document_files f ON f.entity_id = a.nid
+    INNER JOIN field_data_field_document_file f1 ON f1.entity_id = f.field_document_files_value
+    INNER JOIN file_managed f2 ON f2.fid = f1.field_document_file_fid
+  WHERE
+    a.`type` = 'document'
+    AND LOWER(b1.name) IN ('resolution', 'resolutions', 'recommendation', 'recommendations')
+    AND LOWER(e1.title) IN ('cms');
+
+
+-- informea_decisions_keywords
+CREATE OR REPLACE VIEW `informea_decisions_keywords` AS
+  SELECT
+    CONCAT(a.id, '-', td.tid) AS id,
+    a.id decision_id,
+    'http://www.informea.org/terms' AS `namespace`,
+    td.name AS term
+  FROM informea_decisions a
+    INNER JOIN field_data_field_cms_tags tags ON tags.entity_id = a.nid
+    INNER JOIN field_data_field_related_informea_terms itags ON tags.field_cms_tags_tid = itags.entity_id
+    INNER JOIN taxonomy_term_data td ON itags.field_related_informea_terms_target_id = td.tid;
+
+-- informea_decisions_title
+CREATE OR REPLACE VIEW `informea_decisions_title` AS
+  SELECT
+    CONCAT(a.uuid, '-', 'en') AS id,
+    a.uuid                    AS decision_id,
+    'en'                      AS `language`,
+    a.title                   AS title
+  FROM node a
+    INNER JOIN field_data_field_document_type b ON b.entity_id = a.nid
+    INNER JOIN taxonomy_term_data b1 ON b.field_document_type_tid = b1.tid
+    INNER JOIN field_data_field_document_number d ON d.entity_id = a.nid
+    INNER JOIN field_data_field_instrument e ON e.entity_id = a.nid
+    INNER JOIN node e1 ON e.field_instrument_target_id = e1.nid
+  WHERE
+    a.`type` = 'document'
+    AND LOWER(b1.name) IN ('resolution', 'resolutions', 'recommendation', 'recommendations')
+    AND LOWER(e1.title) IN ('cms');
+```
+
+
+### Step 2. Configure the data source
 
 * Deploy the WAR package into Tomcat.
 * Copy WEB-INF/classes/META-INF/persistence.template.xml to WEB-INF/classes/META-INF/persistence.xml and set the appropriate DB connection parameters, see below:
