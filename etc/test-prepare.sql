@@ -750,6 +750,34 @@ INSERT INTO informea_documents_keywords VALUES (
 );
 
 --
+-- informea_documents_goals
+--
+DROP VIEW IF EXISTS `informea_documents_goals`;
+DROP TABLE IF EXISTS informea_documents_goals;
+CREATE TABLE informea_documents_goals (
+  `id` VARCHAR(255) PRIMARY KEY,
+  document_id VARCHAR(36),
+  source VARCHAR(255),
+  type VARCHAR(255),
+  identifier VARCHAR(255)
+);
+DELETE FROM informea_documents_goals;
+INSERT INTO informea_documents_goals VALUES (
+  '00000000-0000-0000-0000-000000000000-g1',
+  '00000000-0000-0000-0000-000000000000',
+  'aichi',
+  'goal',
+  '20'
+);
+INSERT INTO informea_documents_goals VALUES (
+  '00000000-0000-0000-0000-000000000000-g2',
+  '00000000-0000-0000-0000-000000000000',
+  'sdg',
+  'target',
+  '15'
+);
+
+--
 -- informea_documents_references
 --
 DROP VIEW IF EXISTS `informea_documents_references`;

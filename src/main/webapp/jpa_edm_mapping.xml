@@ -26,6 +26,7 @@
 					<JPARelationship name="files">files</JPARelationship>
 					<JPARelationship name="identifiers">identifiers</JPARelationship>
 					<JPARelationship name="keywords">keywords</JPARelationship>
+					<JPARelationship name="goals">goals</JPARelationship>
 					<JPARelationship name="references">referenceToEntities</JPARelationship>
 					<JPARelationship name="tags">tags</JPARelationship>
 					<JPARelationship name="titles">title</JPARelationship>
@@ -155,6 +156,18 @@
 					<JPAAttribute name="scope">scope</JPAAttribute>
 					<JPAAttribute name="sourceURL">sourceURL</JPAAttribute>
 					<JPAAttribute name="termURI">termURI</JPAAttribute>
+				</JPAAttributes>
+				<JPARelationships></JPARelationships>
+			</JPAEntityType>
+
+			<JPAEntityType name="DocumentGoal">
+				<EDMEntityType>DocumentGoal</EDMEntityType>
+				<EDMEntitySet>DocumentGoal</EDMEntitySet>
+				<JPAAttributes>
+					<JPAAttribute name="id">id</JPAAttribute>
+					<JPAAttribute name="source">source</JPAAttribute>
+					<JPAAttribute name="type">type</JPAAttribute>
+					<JPAAttribute name="identifier">identifier</JPAAttribute>
 				</JPAAttributes>
 				<JPARelationships></JPARelationships>
 			</JPAEntityType>

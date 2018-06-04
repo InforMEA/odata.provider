@@ -105,6 +105,13 @@ public class DocumentTest {
         assertEquals("Acceptance", kw.getLiteralForm());
         assertEquals("http://www.informea.org/taxonomy/term/1135", kw.getSourceURL());
 
+        List<DocumentGoal> goals = row.getGoals();
+        assertEquals(2, goals.size());
+        DocumentGoal g1 = goals.get(0);
+        assertEquals("aichi", g1.getSource());
+        assertEquals("goal", g1.getType());
+        assertEquals("20", g1.getIdentifier());
+
         List<DocumentReference> references = row.getReferences();
         DocumentReference ref = references.get(0);
         assertEquals("meeting", ref.getType());

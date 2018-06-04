@@ -48,6 +48,9 @@ public class Document {
     private List<DocumentKeyword> keywords = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    private List<DocumentGoal> goals = new ArrayList<>();
+
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
     private List<DocumentReference> references = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
@@ -114,6 +117,10 @@ public class Document {
 
     public List<DocumentKeyword> getKeywords() {
         return keywords;
+    }
+
+    public List<DocumentGoal> getGoals() {
+        return goals;
     }
 
     public List<DocumentReference> getReferences() {

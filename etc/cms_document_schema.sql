@@ -120,6 +120,19 @@ CREATE OR REPLACE VIEW informea_documents_keywords AS
   FROM DUAL;
 
 --
+-- Documents goals navigation property
+--
+CREATE OR REPLACE VIEW informea_documents_goals AS
+  SELECT
+    NULL id,
+    NULL document_id,
+    NULL source,
+    NULL type,
+    NULL identifier,
+    NULL sourceURL
+  FROM DUAL;
+
+--
 -- Documents `titles` navigation property
 --
 CREATE OR REPLACE VIEW informea_documents_titles AS
