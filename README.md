@@ -217,3 +217,4 @@ The current list of SQL views part of the toolkit:
 * informea_treaties
 * informea_treaties_description
 * informea_treaties_title
+* informea_documents_goals
