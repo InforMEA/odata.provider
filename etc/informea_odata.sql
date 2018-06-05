@@ -665,3 +665,17 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     INNER JOIN `informea_drupal`.field_data_field_treaty t ON t.entity_id = a.nid
     INNER JOIN `informea_drupal`.field_data_field_odata_identifier o ON o.entity_id = t.field_treaty_target_id
   GROUP BY a.nid, t.field_treaty_target_id;
+
+--
+-- Documents `goals` navigation property
+-- @todo: replace with a real view when data is available
+--
+DROP TABLE IF EXISTS informea_documents_goals;
+CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_documents_goals` AS
+  SELECT
+      NULL AS `id`,
+      NULL AS document_id,
+      NULL AS source,
+      NULL AS type,
+      NULL AS identifier
+    FROM DUAL;
