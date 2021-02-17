@@ -9,11 +9,11 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     d.field_official_name_value AS officialNameEnglish,
     FROM_UNIXTIME(a.changed) AS updated
   FROM
-    `informea_drupal`.node a
-    INNER JOIN `informea_drupal`.field_data_field_odata_identifier c ON a.nid = c.entity_id
-    LEFT JOIN `informea_drupal`.field_data_field_treaty_website_url url ON url.entity_id = a.nid
+    `informea_prod`.node a
+    INNER JOIN `informea_prod`.field_data_field_odata_identifier c ON a.nid = c.entity_id
+    LEFT JOIN `informea_prod`.field_data_field_treaty_website_url url ON url.entity_id = a.nid
     -- INNER JOIN field_data_field_data_source src ON src.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_official_name d  ON d.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_official_name d  ON d.entity_id = a.nid
   WHERE
 	-- src.field_data_source_tid = 815 -- resolved through field_odata_identifier
 	-- Do not publish 'special' treaties
@@ -30,8 +30,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.language AS `language`,
     c.body_value AS description
   FROM `informea_treaties` a
-    INNER JOIN `informea_drupal`.field_data_field_odata_identifier b ON a.id = b.field_odata_identifier_value
-    INNER JOIN `informea_drupal`.field_data_body c ON c.entity_id = b.entity_id;
+    INNER JOIN `informea_prod`.field_data_field_odata_identifier b ON a.id = b.field_odata_identifier_value
+    INNER JOIN `informea_prod`.field_data_body c ON c.entity_id = b.entity_id;
 
 -- informea_treaties_title
 CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_treaties_title` AS
@@ -41,8 +41,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.language AS `language`,
     c.title_field_value AS title
   FROM `informea_treaties` a
-    INNER JOIN `informea_drupal`.field_data_field_odata_identifier b ON a.id = b.field_odata_identifier_value
-    INNER JOIN `informea_drupal`.field_data_title_field c ON c.entity_id = b.entity_id;
+    INNER JOIN `informea_prod`.field_data_field_odata_identifier b ON a.id = b.field_odata_identifier_value
+    INNER JOIN `informea_prod`.field_data_title_field c ON c.entity_id = b.entity_id;
 
 -- informea_meetings
 CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_meetings` AS
@@ -67,39 +67,39 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     FROM_UNIXTIME(a.changed) AS updated,
     a.nid AS nid
   FROM
-    `informea_drupal`.node a
-    INNER JOIN `informea_drupal`.field_data_field_treaty b ON a.nid = b.entity_id
-    INNER JOIN `informea_drupal`.field_data_field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
-    INNER JOIN `informea_drupal`.field_data_field_url url ON url.entity_id = a.nid
-    INNER JOIN `informea_drupal`.field_data_event_calendar_date d ON d.entity_id = a.nid
+    `informea_prod`.node a
+    INNER JOIN `informea_prod`.field_data_field_treaty b ON a.nid = b.entity_id
+    INNER JOIN `informea_prod`.field_data_field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
+    INNER JOIN `informea_prod`.field_data_field_url url ON url.entity_id = a.nid
+    INNER JOIN `informea_prod`.field_data_event_calendar_date d ON d.entity_id = a.nid
     
-    LEFT JOIN `informea_drupal`.field_data_field_event_repetition rep ON rep.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.taxonomy_term_data t1 ON rep.field_event_repetition_tid = t1.tid
+    LEFT JOIN `informea_prod`.field_data_field_event_repetition rep ON rep.entity_id = a.nid
+    LEFT JOIN `informea_prod`.taxonomy_term_data t1 ON rep.field_event_repetition_tid = t1.tid
     
-    LEFT JOIN `informea_drupal`.field_data_field_event_kind k ON k.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.taxonomy_term_data t2 ON k.field_event_kind_tid = t2.tid
+    LEFT JOIN `informea_prod`.field_data_field_event_kind k ON k.entity_id = a.nid
+    LEFT JOIN `informea_prod`.taxonomy_term_data t2 ON k.field_event_kind_tid = t2.tid
     
-    LEFT JOIN `informea_drupal`.field_data_field_event_type et ON et.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.taxonomy_term_data t3 ON et.field_event_type_tid = t3.tid
+    LEFT JOIN `informea_prod`.field_data_field_event_type et ON et.entity_id = a.nid
+    LEFT JOIN `informea_prod`.taxonomy_term_data t3 ON et.field_event_type_tid = t3.tid
     
-    LEFT JOIN `informea_drupal`.field_data_field_event_access ac ON ac.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.taxonomy_term_data t4 ON ac.field_event_access_tid = t4.tid
+    LEFT JOIN `informea_prod`.field_data_field_event_access ac ON ac.entity_id = a.nid
+    LEFT JOIN `informea_prod`.taxonomy_term_data t4 ON ac.field_event_access_tid = t4.tid
 
-    LEFT JOIN `informea_drupal`.field_data_field_event_calendar_status st ON st.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.taxonomy_term_data t5 ON st.field_event_calendar_status_tid = t5.tid
+    LEFT JOIN `informea_prod`.field_data_field_event_calendar_status st ON st.entity_id = a.nid
+    LEFT JOIN `informea_prod`.taxonomy_term_data t5 ON st.field_event_calendar_status_tid = t5.tid
 
-    LEFT JOIN `informea_drupal`.field_data_field_location loc ON loc.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_city city ON city.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_location loc ON loc.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_city city ON city.entity_id = a.nid
 
-    INNER JOIN `informea_drupal`.field_data_field_country cou ON cou.entity_id = a.nid
-    INNER JOIN `informea_drupal`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
-    INNER JOIN `informea_drupal`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
+    INNER JOIN `informea_prod`.field_data_field_country cou ON cou.entity_id = a.nid
+    INNER JOIN `informea_prod`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
+    INNER JOIN `informea_prod`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
 
-    LEFT JOIN `informea_drupal`.field_data_field_latitude lat ON lat.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_longitude lon ON lon.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_latitude lat ON lat.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_longitude lon ON lon.entity_id = a.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_last_update upd ON upd.entity_id = a.nid
-    INNER JOIN `informea_drupal`.node treaty ON b.entity_id = treaty.nid
+    LEFT JOIN `informea_prod`.field_data_field_last_update upd ON upd.entity_id = a.nid
+    INNER JOIN `informea_prod`.node treaty ON b.entity_id = treaty.nid
 
   WHERE
     a.`type` = 'event_calendar'
@@ -119,7 +119,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.language AS `language`,
     c.body_value AS description
   FROM `informea_meetings` a
-    INNER JOIN `informea_drupal`.field_data_body c ON a.nid = c.entity_id;
+    INNER JOIN `informea_prod`.field_data_body c ON a.nid = c.entity_id;
 
 
 -- informea_meetings_title
@@ -130,7 +130,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.language AS `language`,
     c.title_field_value AS title
   FROM `informea_meetings` a 
-    INNER JOIN `informea_drupal`.field_data_title_field c ON a.nid = c.entity_id;
+    INNER JOIN `informea_prod`.field_data_title_field c ON a.nid = c.entity_id;
 
 -- DECISIONS 
 -- informea_decisions
@@ -150,31 +150,31 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     so.field_sorting_order_value AS displayOrder,
     a.nid AS nid
   FROM
-    `informea_drupal`.node a
-    INNER JOIN `informea_drupal`.field_data_field_treaty b ON a.nid = b.entity_id
-    INNER JOIN `informea_drupal`.field_data_field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
+    `informea_prod`.node a
+    INNER JOIN `informea_prod`.field_data_field_treaty b ON a.nid = b.entity_id
+    INNER JOIN `informea_prod`.field_data_field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
 
-    LEFT JOIN `informea_drupal`.field_data_field_url url ON url.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_url url ON url.entity_id = a.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_decision_type dt ON dt.entity_id = a.nid
-    INNER JOIN `informea_drupal`.taxonomy_term_data t1 ON dt.field_decision_type_tid = t1.tid
+    LEFT JOIN `informea_prod`.field_data_field_decision_type dt ON dt.entity_id = a.nid
+    INNER JOIN `informea_prod`.taxonomy_term_data t1 ON dt.field_decision_type_tid = t1.tid
 
-    LEFT JOIN `informea_drupal`.field_data_field_decision_status ds ON ds.entity_id = a.nid
-    INNER JOIN `informea_drupal`.taxonomy_term_data t2 ON ds.field_decision_status_tid = t2.tid
+    LEFT JOIN `informea_prod`.field_data_field_decision_status ds ON ds.entity_id = a.nid
+    INNER JOIN `informea_prod`.taxonomy_term_data t2 ON ds.field_decision_status_tid = t2.tid
 
-    INNER JOIN `informea_drupal`.field_data_field_decision_number dn ON dn.entity_id = a.nid
+    INNER JOIN `informea_prod`.field_data_field_decision_number dn ON dn.entity_id = a.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_sorting_date dp ON dp.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_sorting_date dp ON dp.entity_id = a.nid
 
-    INNER JOIN `informea_drupal`.field_data_field_meeting m ON m.entity_id = a.nid  
-    INNER JOIN `informea_drupal`.node n2 ON m.field_meeting_target_id = n2.nid
+    INNER JOIN `informea_prod`.field_data_field_meeting m ON m.entity_id = a.nid  
+    INNER JOIN `informea_prod`.node n2 ON m.field_meeting_target_id = n2.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_url urlm ON urlm.entity_id = m.field_meeting_target_id
+    LEFT JOIN `informea_prod`.field_data_field_url urlm ON urlm.entity_id = m.field_meeting_target_id
 
-    LEFT JOIN `informea_drupal`.field_data_field_last_update upd ON upd.entity_id = a.nid
-    INNER JOIN `informea_drupal`.node treaty ON b.entity_id = treaty.nid
+    LEFT JOIN `informea_prod`.field_data_field_last_update upd ON upd.entity_id = a.nid
+    INNER JOIN `informea_prod`.node treaty ON b.entity_id = treaty.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_sorting_order so ON so.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_sorting_order so ON so.entity_id = a.nid
   WHERE 
       a.`type` = 'decision'
       AND a.status = 1
@@ -191,7 +191,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.language AS `language`,
     c.title_field_value AS title
   FROM `informea_decisions` a
-    INNER JOIN `informea_drupal`.field_data_title_field c ON a.nid = c.entity_id;
+    INNER JOIN `informea_prod`.field_data_title_field c ON a.nid = c.entity_id;
 
 -- informea_decisions_content
 CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_content` AS
@@ -201,7 +201,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.language AS `language`,
     c.body_value AS content
   FROM `informea_decisions` a
-    INNER JOIN `informea_drupal`.field_data_body c ON a.nid = c.entity_id
+    INNER JOIN `informea_prod`.field_data_body c ON a.nid = c.entity_id
   WHERE
     c.body_value IS NOT NULL AND TRIM(c.body_value) <> '';
 
@@ -216,8 +216,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     f.`language` AS `language`,
     fm.filename AS filename
   FROM `informea_decisions` a
-    INNER JOIN `informea_drupal`.field_data_field_files f ON f.entity_id = a.nid
-    INNER JOIN `informea_drupal`.file_managed fm ON fm.fid = field_files_fid;
+    INNER JOIN `informea_prod`.field_data_field_files f ON f.entity_id = a.nid
+    INNER JOIN `informea_prod`.file_managed fm ON fm.fid = field_files_fid;
 
 -- informea_decisions_keywords
 CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_keywords` AS
@@ -227,8 +227,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     'http://www.informea.org/terms/' AS namespace,
     t1.name AS term
   FROM `informea_decisions` a
-    INNER JOIN `informea_drupal`.field_data_field_informea_tags c ON a.nid = c.entity_id
-    INNER JOIN `informea_drupal`.taxonomy_term_data t1 ON c.field_informea_tags_tid = t1.tid;
+    INNER JOIN `informea_prod`.field_data_field_informea_tags c ON a.nid = c.entity_id
+    INNER JOIN `informea_prod`.taxonomy_term_data t1 ON c.field_informea_tags_tid = t1.tid;
 
 -- informea_decisions_longtitle
 CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_decisions_longtitle` AS
@@ -247,7 +247,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.language AS `language`,
     c.body_summary AS summary
   FROM `informea_decisions` a
-    INNER JOIN `informea_drupal`.field_data_body c ON a.nid = c.entity_id
+    INNER JOIN `informea_prod`.field_data_body c ON a.nid = c.entity_id
   WHERE
     c.body_summary IS NOT NULL AND TRIM(c.body_summary) <> '';
   
@@ -264,16 +264,16 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     FROM_UNIXTIME(a.changed) AS updated,
     a.nid AS nid
   FROM
-    `informea_drupal`.node a
-    INNER JOIN `informea_drupal`.field_data_field_treaty b ON a.nid = b.entity_id
-    INNER JOIN `informea_drupal`.field_data_field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
-    LEFT JOIN `informea_drupal`.field_data_field_country cou ON cou.entity_id = a.nid
-    INNER JOIN `informea_drupal`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
-    INNER JOIN `informea_drupal`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
-    LEFT JOIN `informea_drupal`.field_data_field_sorting_date sd ON sd.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_document_url durl ON durl.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_last_update upd ON upd.entity_id = a.nid
-    INNER JOIN `informea_drupal`.node treaty ON b.entity_id = treaty.nid
+    `informea_prod`.node a
+    INNER JOIN `informea_prod`.field_data_field_treaty b ON a.nid = b.entity_id
+    INNER JOIN `informea_prod`.field_data_field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
+    LEFT JOIN `informea_prod`.field_data_field_country cou ON cou.entity_id = a.nid
+    INNER JOIN `informea_prod`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
+    INNER JOIN `informea_prod`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
+    LEFT JOIN `informea_prod`.field_data_field_sorting_date sd ON sd.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_document_url durl ON durl.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_last_update upd ON upd.entity_id = a.nid
+    INNER JOIN `informea_prod`.node treaty ON b.entity_id = treaty.nid
   WHERE 
       a.`type` = 'national_report'
       AND a.status = 1
@@ -290,7 +290,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.language AS `language`,
     c.title_field_value AS title
   FROM `informea_country_reports` a 
-    INNER JOIN `informea_drupal`.field_data_title_field c ON a.nid = c.entity_id;
+    INNER JOIN `informea_prod`.field_data_title_field c ON a.nid = c.entity_id;
 
 -- informea_country_reports_documents
 CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_country_reports_documents` AS
@@ -303,8 +303,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     f.`language` AS `language`,
     fm.filename AS filename
   FROM `informea_country_reports` a
-    INNER JOIN `informea_drupal`.field_data_field_files f ON f.entity_id = a.nid
-    INNER JOIN `informea_drupal`.file_managed fm ON fm.fid = field_files_fid;
+    INNER JOIN `informea_prod`.field_data_field_files f ON f.entity_id = a.nid
+    INNER JOIN `informea_prod`.file_managed fm ON fm.fid = field_files_fid;
 
 -- NATIONAL PLANS (Action Plans)
 -- informea_national_plans
@@ -319,22 +319,22 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     FROM_UNIXTIME(a.changed) AS updated,
     a.nid AS nid
   FROM
-    `informea_drupal`.node a
-    INNER JOIN `informea_drupal`.field_data_field_treaty b ON a.nid = b.entity_id
-    INNER JOIN `informea_drupal`.field_data_field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
+    `informea_prod`.node a
+    INNER JOIN `informea_prod`.field_data_field_treaty b ON a.nid = b.entity_id
+    INNER JOIN `informea_prod`.field_data_field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
 
-    LEFT JOIN `informea_drupal`.field_data_field_country cou ON cou.entity_id = a.nid
-    INNER JOIN `informea_drupal`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
-    INNER JOIN `informea_drupal`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
+    LEFT JOIN `informea_prod`.field_data_field_country cou ON cou.entity_id = a.nid
+    INNER JOIN `informea_prod`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
+    INNER JOIN `informea_prod`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
 
-    LEFT JOIN `informea_drupal`.field_data_field_action_plan_type apt ON apt.entity_id = a.nid
-    INNER JOIN `informea_drupal`.taxonomy_term_data t1 ON apt.field_action_plan_type_tid = t1.tid
+    LEFT JOIN `informea_prod`.field_data_field_action_plan_type apt ON apt.entity_id = a.nid
+    INNER JOIN `informea_prod`.taxonomy_term_data t1 ON apt.field_action_plan_type_tid = t1.tid
 
-    LEFT JOIN `informea_drupal`.field_data_field_sorting_date sd ON sd.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_document_url durl ON durl.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_sorting_date sd ON sd.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_document_url durl ON durl.entity_id = a.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_last_update upd ON upd.entity_id = a.nid
-    INNER JOIN `informea_drupal`.node treaty ON b.entity_id = treaty.nid
+    LEFT JOIN `informea_prod`.field_data_field_last_update upd ON upd.entity_id = a.nid
+    INNER JOIN `informea_prod`.node treaty ON b.entity_id = treaty.nid
   WHERE 
     a.type = 'action_plan'
     AND a.status = 1
@@ -351,7 +351,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.language AS `language`,
     c.title_field_value AS title
   FROM `informea_national_plans` a
-  INNER JOIN `informea_drupal`.field_data_title_field c ON a.nid = c.entity_id;
+  INNER JOIN `informea_prod`.field_data_title_field c ON a.nid = c.entity_id;
 
 -- informea_national_plans_documents
 CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_national_plans_documents` AS
@@ -364,8 +364,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     f.`language` AS `language`,
     fm.filename AS filename
   FROM `informea_national_plans` a
-    INNER JOIN `informea_drupal`.field_data_field_files f ON f.entity_id = a.nid
-    INNER JOIN `informea_drupal`.file_managed fm ON fm.fid = field_files_fid;
+    INNER JOIN `informea_prod`.field_data_field_files f ON f.entity_id = a.nid
+    INNER JOIN `informea_prod`.file_managed fm ON fm.fid = field_files_fid;
 
 -- CONTACTS (Focal Points)
 CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `informea_contacts` AS
@@ -386,31 +386,31 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     pri.field_contact_primary_nfp_value AS `primary`,
     FROM_UNIXTIME(a.changed) AS updated,
     a.nid
-  FROM `informea_drupal`.node a
-    LEFT JOIN `informea_drupal`.field_data_field_country cou ON cou.entity_id = a.nid
-    INNER JOIN `informea_drupal`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
-    INNER JOIN `informea_drupal`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
+  FROM `informea_prod`.node a
+    LEFT JOIN `informea_prod`.field_data_field_country cou ON cou.entity_id = a.nid
+    INNER JOIN `informea_prod`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
+    INNER JOIN `informea_prod`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
 
-    LEFT JOIN `informea_drupal`.field_data_field_person_prefix prf ON prf.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_person_first_name fst ON fst.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_person_last_name lst ON lst.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_person_prefix prf ON prf.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_person_first_name fst ON fst.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_person_last_name lst ON lst.entity_id = a.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_person_position  pos ON pos.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_person_institution inst ON inst.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_person_department dept ON dept.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_person_position  pos ON pos.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_person_institution inst ON inst.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_person_department dept ON dept.entity_id = a.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_person_type ptype ON ptype.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.taxonomy_term_data t1 ON ptype.field_person_type_tid = t1.tid
+    LEFT JOIN `informea_prod`.field_data_field_person_type ptype ON ptype.entity_id = a.nid
+    LEFT JOIN `informea_prod`.taxonomy_term_data t1 ON ptype.field_person_type_tid = t1.tid
 
-    LEFT JOIN `informea_drupal`.field_data_field_address addr ON addr.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_person_email mail ON mail.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_contact_telephone tel ON tel.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_contact_fax fax ON fax.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_contact_primary_nfp pri ON pri.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_address addr ON addr.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_person_email mail ON mail.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_contact_telephone tel ON tel.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_contact_fax fax ON fax.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_contact_primary_nfp pri ON pri.entity_id = a.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_last_update upd ON upd.entity_id = a.nid
-    INNER JOIN `informea_drupal`.field_data_field_treaty t ON a.nid = t.entity_id
-    INNER JOIN `informea_drupal`.node treaty ON t.entity_id = treaty.nid
+    LEFT JOIN `informea_prod`.field_data_field_last_update upd ON upd.entity_id = a.nid
+    INNER JOIN `informea_prod`.field_data_field_treaty t ON a.nid = t.entity_id
+    INNER JOIN `informea_prod`.node treaty ON t.entity_id = treaty.nid
   WHERE 
     a.`type` = 'contact_person'
     AND a.status = 1
@@ -426,8 +426,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     a.id AS contact_id,
     d.field_odata_identifier_value AS treaty
   FROM `informea_contacts` a
-  INNER JOIN `informea_drupal`.field_data_field_treaty c ON a.nid = c.entity_id
-  INNER JOIN `informea_drupal`.field_data_field_odata_identifier d ON c.field_treaty_target_id = d.entity_id;
+  INNER JOIN `informea_prod`.field_data_field_treaty c ON a.nid = c.entity_id
+  INNER JOIN `informea_prod`.field_data_field_odata_identifier d ON c.field_treaty_target_id = d.entity_id;
 
 -- SITES
 -- informea_sites
@@ -442,21 +442,21 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     lon.field_longitude_value AS longitude,
     FROM_UNIXTIME(a.changed) AS updated,
     a.nid AS nid
-  FROM `informea_drupal`.node a
-    INNER JOIN `informea_drupal`.field_data_field_treaty b ON a.nid = b.entity_id
-    INNER JOIN `informea_drupal`.field_data_field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
+  FROM `informea_prod`.node a
+    INNER JOIN `informea_prod`.field_data_field_treaty b ON a.nid = b.entity_id
+    INNER JOIN `informea_prod`.field_data_field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
 
-    LEFT JOIN `informea_drupal`.field_data_field_country cou ON cou.entity_id = a.nid
-    INNER JOIN `informea_drupal`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
-    INNER JOIN `informea_drupal`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
+    LEFT JOIN `informea_prod`.field_data_field_country cou ON cou.entity_id = a.nid
+    INNER JOIN `informea_prod`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
+    INNER JOIN `informea_prod`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
 
-    LEFT JOIN `informea_drupal`.field_data_field_url url ON url.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_url url ON url.entity_id = a.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_latitude lat ON lat.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_longitude lon ON lon.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_latitude lat ON lat.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_longitude lon ON lon.entity_id = a.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_last_update upd ON upd.entity_id = a.nid
-    INNER JOIN `informea_drupal`.node treaty ON b.entity_id = treaty.nid
+    LEFT JOIN `informea_prod`.field_data_field_last_update upd ON upd.entity_id = a.nid
+    INNER JOIN `informea_prod`.node treaty ON b.entity_id = treaty.nid
 
     WHERE 
       a.`type` = 'geographical_site'
@@ -474,7 +474,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.language AS `language`,
     c.title_field_value AS `name`
   FROM `informea_sites` a 
-    INNER JOIN `informea_drupal`.field_data_title_field c ON a.nid = c.entity_id;
+    INNER JOIN `informea_prod`.field_data_title_field c ON a.nid = c.entity_id;
 
 
 -- DOCUMENTS ENTITY
@@ -495,18 +495,18 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     iso2.field_country_iso2_value AS country,
     a.nid
   FROM
-    `informea_drupal`.node a
-    INNER JOIN `informea_drupal`.field_data_field_treaty b ON b.entity_id = a.nid
-    INNER JOIN `informea_drupal`.field_data_field_odata_identifier c ON c.entity_id = b.field_treaty_target_id
+    `informea_prod`.node a
+    INNER JOIN `informea_prod`.field_data_field_treaty b ON b.entity_id = a.nid
+    INNER JOIN `informea_prod`.field_data_field_odata_identifier c ON c.entity_id = b.field_treaty_target_id
 
-    LEFT JOIN `informea_drupal`.field_data_field_sorting_date dp ON dp.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.field_data_field_sorting_order so ON so.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_sorting_date dp ON dp.entity_id = a.nid
+    LEFT JOIN `informea_prod`.field_data_field_sorting_order so ON so.entity_id = a.nid
 
-    LEFT JOIN `informea_drupal`.field_data_field_country cou ON cou.entity_id = a.nid
-    LEFT JOIN `informea_drupal`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
-    LEFT JOIN `informea_drupal`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
+    LEFT JOIN `informea_prod`.field_data_field_country cou ON cou.entity_id = a.nid
+    LEFT JOIN `informea_prod`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
+    LEFT JOIN `informea_prod`.field_data_field_country_iso2 iso2 ON nc.nid = iso2.entity_id
 
-    INNER JOIN `informea_drupal`.node treaty ON treaty.nid = b.field_treaty_target_id
+    INNER JOIN `informea_prod`.node treaty ON treaty.nid = b.field_treaty_target_id
   WHERE
     a.`type` = 'document'
     AND a.status = 1
@@ -525,8 +525,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     a.id document_id,
     t.name AS `value`
   FROM informea_documents a
-    INNER JOIN `informea_drupal`.field_data_field_document_type dt ON (a.nid = dt.entity_id AND dt.bundle = 'document')
-    INNER JOIN `informea_drupal`.taxonomy_term_data t on dt.field_document_type_tid = t.tid
+    INNER JOIN `informea_prod`.field_data_field_document_type dt ON (a.nid = dt.entity_id AND dt.bundle = 'document')
+    INNER JOIN `informea_prod`.taxonomy_term_data t on dt.field_document_type_tid = t.tid
   GROUP BY a.id, t.tid;
 
 --
@@ -540,9 +540,9 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     NULL `type`,
     btn.name_field_value AS name
   FROM informea_documents a
-    INNER JOIN `informea_drupal`.field_data_field_document_authors b ON b.entity_id = a.nid
-    INNER JOIN `informea_drupal`.taxonomy_term_data bt ON bt.tid = b.field_document_authors_tid
-    INNER JOIN `informea_drupal`.field_data_name_field btn ON btn.entity_id = bt.tid
+    INNER JOIN `informea_prod`.field_data_field_document_authors b ON b.entity_id = a.nid
+    INNER JOIN `informea_prod`.taxonomy_term_data bt ON bt.tid = b.field_document_authors_tid
+    INNER JOIN `informea_prod`.field_data_name_field btn ON btn.entity_id = bt.tid
   GROUP BY a.nid, bt.tid;
 
 --
@@ -558,10 +558,10 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     kwn.name_field_value AS literalForm,
     CONCAT('https://www.informea.org/taxonomy/term/', kwt.tid) AS sourceURL
   FROM informea_documents a
-    INNER JOIN `informea_drupal`.field_data_field_informea_tags kw ON kw.entity_id = a.nid
-    INNER JOIN `informea_drupal`.taxonomy_term_data kwt ON kwt.tid = kw.field_informea_tags_tid
-    INNER JOIN `informea_drupal`.field_data_name_field kwn ON kwn.entity_id = kwt.tid
-    INNER JOIN `informea_drupal`.field_data_field_taxonomy_term_uri uri ON uri.entity_id = kwt.tid
+    INNER JOIN `informea_prod`.field_data_field_informea_tags kw ON kw.entity_id = a.nid
+    INNER JOIN `informea_prod`.taxonomy_term_data kwt ON kwt.tid = kw.field_informea_tags_tid
+    INNER JOIN `informea_prod`.field_data_name_field kwn ON kwn.entity_id = kwt.tid
+    INNER JOIN `informea_prod`.field_data_field_taxonomy_term_uri uri ON uri.entity_id = kwt.tid
   GROUP BY a.nid, kwt.tid;
 
 --
@@ -575,7 +575,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     b.language AS `language`,
     b.title_field_value AS value
   FROM `informea_documents` a
-    INNER JOIN `informea_drupal`.field_data_title_field b ON b.entity_id = a.nid;
+    INNER JOIN `informea_prod`.field_data_title_field b ON b.entity_id = a.nid;
 
 --
 -- Documents `description` navigation property
@@ -588,9 +588,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     c.language AS `language`,
     c.body_value AS value
   FROM `informea_documents` a
-    INNER JOIN `informea_drupal`.field_data_body c ON a.nid = c.entity_id
-  WHERE c.body_value IS NOT NULL AND c.body_value <> ''
-    ORDER BY a.nid;
+    INNER JOIN `informea_prod`.field_data_body c ON a.nid = c.entity_id
+  WHERE c.body_value IS NOT NULL AND c.body_value <> '';
 
 --
 -- Documents `identifiers` navigation property
@@ -604,7 +603,7 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     NULL `name`,
     NULL `value`
   FROM `informea_documents` a
-    INNER JOIN `informea_drupal`.field_data_field_document_identifiers b ON b.entity_id = a.nid;
+    INNER JOIN `informea_prod`.field_data_field_document_identifiers b ON b.entity_id = a.nid;
 
 --
 -- Documents `files` navigation property
@@ -620,8 +619,8 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     d.language,
     fm.filename AS filename
   FROM `informea_documents` a
-    INNER JOIN `informea_drupal`.field_data_field_files d ON d.entity_id = a.nid
-    INNER JOIN `informea_drupal`.file_managed fm ON fm.fid = d.field_files_fid;
+    INNER JOIN `informea_prod`.field_data_field_files d ON d.entity_id = a.nid
+    INNER JOIN `informea_prod`.file_managed fm ON fm.fid = d.field_files_fid;
 
 --
 -- Documents `tags` navigation property
@@ -662,6 +661,6 @@ CREATE OR REPLACE DEFINER =`informea`@`localhost` SQL SECURITY DEFINER VIEW `inf
     a.id AS document_id,
     o.field_odata_identifier_value AS treaty
   FROM informea_documents a
-    INNER JOIN `informea_drupal`.field_data_field_treaty t ON t.entity_id = a.nid
-    INNER JOIN `informea_drupal`.field_data_field_odata_identifier o ON o.entity_id = t.field_treaty_target_id
+    INNER JOIN `informea_prod`.field_data_field_treaty t ON t.entity_id = a.nid
+    INNER JOIN `informea_prod`.field_data_field_odata_identifier o ON o.entity_id = t.field_treaty_target_id
   GROUP BY a.nid, t.field_treaty_target_id;
