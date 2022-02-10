@@ -7,17 +7,19 @@ CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_treaties` AS
     url.field_treaty_website_url_uri AS treatyWebsiteURL,
     b.title AS titleEnglish,
     d.field_official_name_value AS officialNameEnglish,
-    FROM_UNIXTIME(b.changed) AS updated
+    FROM_UNIXTIME(b.changed) AS updated,
+    a.nid
   FROM
     `informea`.node a
-    INNER JOIN `informea`.node_field_data b ON a.nid = b.nid
-    INNER JOIN `informea`.node__field_odata_identifier c ON a.nid = c.entity_id
+    INNER JOIN `informea`.node_field_data b ON b.nid = a.nid
+    INNER JOIN `informea`.node__field_odata_identifier c ON c.entity_id = a.nid
     LEFT JOIN `informea`.node__field_treaty_website_url url ON url.entity_id = a.nid
-    LEFT JOIN `informea`.node__field_official_name d  ON d.entity_id = a.nid
+    LEFT JOIN `informea`.node__field_official_name d ON d.entity_id = a.nid
   WHERE
   -- Do not publish 'special' treaties
   a.nid NOT IN (316, 302, 282, 301, 267)
     AND a.`TYPE` = 'treaty'
+    AND b.langcode = 'en'
     AND b.`status` = 1
     GROUP BY a.nid;
 
@@ -29,8 +31,7 @@ CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_treaties_description` AS
     c.langcode AS `language`,
     c.body_value AS description
   FROM `informea_treaties` a
-    INNER JOIN `informea`.node__field_odata_identifier b ON a.id = b.field_odata_identifier_value
-    INNER JOIN `informea`.node__body c ON c.entity_id = b.entity_id;
+    INNER JOIN `informea`.node__body c ON c.entity_id = a.nid;
 
 
 -- informea_treaties_title
@@ -41,7 +42,7 @@ CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_treaties_title` AS
     c.langcode AS `language`,
     c.title AS title
   FROM `informea_treaties` a
-    INNER JOIN `informea`.node__field_odata_identifier b ON a.id = b.field_odata_identifier_value
+    INNER JOIN `informea`.node__field_odata_identifier b ON b.field_odata_identifier_value = a.id
     INNER JOIN `informea`.node_field_data c ON c.nid = b.entity_id;
 
 -- informea_meetings
@@ -70,28 +71,30 @@ CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_meetings` AS
   FROM
     `informea`.node a
     INNER JOIN `informea`.node_field_data nfd ON a.nid = nfd.nid
-    INNER JOIN `informea`.node__field_treaty b ON a.nid = b.entity_id
-    INNER JOIN `informea`.node__field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
+    INNER JOIN `informea`.node__field_treaty b ON b.entity_id = a.nid
+    INNER JOIN `informea`.node__field_odata_identifier c ON c.entity_id = b.field_treaty_target_id
     INNER JOIN `informea`.node__field_external_url url ON url.entity_id = a.nid
     INNER JOIN `informea`.node__field_date_range d ON d.entity_id = a.nid
     LEFT JOIN `informea`.node__field_repetition rep ON rep.entity_id = a.nid
     LEFT JOIN `informea`.node__field_event_kind k ON k.entity_id = a.nid
     LEFT JOIN `informea`.node__field_event_type et ON et.entity_id = a.nid
-    LEFT JOIN `informea`.taxonomy_term_field_data t3 ON et.field_event_type_target_id = t3.tid
+    LEFT JOIN `informea`.taxonomy_term_field_data t3 ON t3.tid = et.field_event_type_target_id
     LEFT JOIN `informea`.node__field_event_access ac ON ac.entity_id = a.nid
     LEFT JOIN `informea`.node__field_event_status st ON st.entity_id = a.nid
     LEFT JOIN `informea`.node__field_location loc ON loc.entity_id = a.nid
     LEFT JOIN `informea`.node__field_city city ON city.entity_id = a.nid
     INNER JOIN `informea`.node__field_country cou ON cou.entity_id = a.nid
-    INNER JOIN `informea`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
-    INNER JOIN `informea`.node__field_country_iso2 iso2 ON nc.nid = iso2.entity_id
+    INNER JOIN `informea`.node nc ON (nc.nid = cou.field_country_target_id AND nc.type = 'country')
+    INNER JOIN `informea`.node__field_country_iso2 iso2 ON iso2.entity_id = nc.nid
     LEFT JOIN `informea`.node__field_latitude lat ON lat.entity_id = a.nid
     LEFT JOIN `informea`.node__field_longitude lon ON lon.entity_id = a.nid
     LEFT JOIN `informea`.node__field_last_update upd ON upd.entity_id = a.nid
-    INNER JOIN `informea`.node_field_data treaty ON b.field_treaty_target_id = treaty.nid
+    INNER JOIN `informea`.node_field_data treaty ON treaty.nid = b.field_treaty_target_id
     INNER JOIN `informea`.node n ON treaty.nid = n.nid
   WHERE
-    a.`type` = 'event'
+    a.langcode = 'en'
+    AND n.langcode = 'en'
+    AND a.`type` = 'event'
     AND d.field_date_range_value IS NOT NULL
     -- Do not publish 'special' treaties
     AND b.field_treaty_target_id NOT IN (316, 302, 282, 301, 267)
@@ -107,7 +110,7 @@ CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_meetings_description` AS
     c.langcode AS `language`,
     c.body_value AS description
   FROM `informea_meetings` a
-    INNER JOIN `informea`.node__body c ON a.nid = c.entity_id;
+    INNER JOIN `informea`.node__body c ON c.entity_id = a.nid;
 
 -- informea_meetings_title
 CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_meetings_title` AS
@@ -135,6 +138,7 @@ CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_decisions` AS
     n2.title AS meetingTitle,
     urlm.field_external_url_uri AS meetingUrl,
     FROM_UNIXTIME(a2.changed) AS updated,
+    weight.field_weight_value AS displayOrder,
     a.nid AS nid
   FROM
     `informea`.node a
@@ -150,15 +154,16 @@ CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_decisions` AS
     INNER JOIN `informea`.node_field_data n2 ON m.field_meeting_target_id = n2.nid
     INNER JOIN `informea`.node n3 ON m.field_meeting_target_id = n3.nid
     LEFT JOIN `informea`.node__field_external_url urlm ON urlm.entity_id = m.field_meeting_target_id
+    LEFT JOIN `informea`.node__field_weight weight ON weight.entity_id = a.nid
     INNER JOIN `informea`.node treaty ON b.field_treaty_target_id = treaty.nid
-    INNER JOIN `informea`.node_field_data treaty2 ON b.field_treaty_target_id = treaty.nid
+    INNER JOIN `informea`.node_field_data treaty2 ON treaty2.nid = treaty.nid
   WHERE
-      a.`type` = 'decision'
+	  a.`type` = 'decision'
       AND a2.status = 1
       AND treaty2.status = 1
       -- Do not publish 'special' treaties
       AND b.field_treaty_target_id NOT IN (316, 302, 282, 301, 267)
-      GROUP BY a.nid;
+      GROUP BY a.nid
 
 -- informea_decisions_title
 CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_decisions_title` AS
@@ -241,17 +246,17 @@ CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_country_reports` AS
     a.nid AS nid
   FROM
     `informea`.node a
-    INNER JOIN `informea`.node_field_data nfd ON a.nid = nfd.nid
-    INNER JOIN `informea`.node__field_treaty b ON a.nid = b.entity_id
-    INNER JOIN `informea`.node__field_odata_identifier c ON b.field_treaty_target_id = c.entity_id
+    INNER JOIN `informea`.node_field_data nfd ON nfd.nid = a.nid
+    INNER JOIN `informea`.node__field_treaty b ON b.entity_id = a.nid
+    INNER JOIN `informea`.node__field_odata_identifier c ON c.entity_id = b.field_treaty_target_id
     LEFT JOIN `informea`.node__field_country cou ON cou.entity_id = a.nid
-    INNER JOIN `informea`.node nc ON (cou.field_country_target_id = nc.nid AND nc.type = 'country')
-    INNER JOIN `informea`.node__field_country_iso2 iso2 ON nc.nid = iso2.entity_id
+    INNER JOIN `informea`.node nc ON (nc.nid = cou.field_country_target_id AND nc.type = 'country')
+    INNER JOIN `informea`.node__field_country_iso2 iso2 ON iso2.entity_id = nc.nid
     LEFT JOIN `informea`.node__field_date sd ON sd.entity_id = a.nid
     LEFT JOIN `informea`.node__field_external_url url ON url.entity_id = a.nid
     LEFT JOIN `informea`.node__field_last_update upd ON upd.entity_id = a.nid
-    INNER JOIN `informea`.node treaty ON b.field_treaty_target_id = treaty.nid
-    INNER JOIN `informea`.node_field_data treaty2 ON b.field_treaty_target_id = treaty.nid
+    INNER JOIN `informea`.node treaty ON treaty.nid = b.field_treaty_target_id
+    INNER JOIN `informea`.node_field_data treaty2 ON treaty2.nid = b.field_treaty_target_id
   WHERE
       a.`type` = 'national_report'
       AND nfd.status = 1
@@ -310,13 +315,16 @@ CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_national_plans` AS
     LEFT JOIN `informea`.node__field_external_url url ON url.entity_id = a.nid
     LEFT JOIN `informea`.node__field_last_update upd ON upd.entity_id = a.nid
     INNER JOIN `informea`.node treaty ON b.field_treaty_target_id = treaty.nid
-    INNER JOIN `informea`.node_field_data treaty2 ON b.field_treaty_target_id = treaty.nid
+    INNER JOIN `informea`.node_field_data treaty2 ON treaty2.nid = b.field_treaty_target_id
   WHERE
     a2.type = 'action_plan'
     AND a2.status = 1
     AND treaty2.status = 1
     -- Do not publish 'special' treaties
     AND b.field_treaty_target_id NOT IN (316, 302, 282, 301, 267)
+    AND url.field_external_url_uri IS NOT NULL
+    -- avoid migration issue 10 Feb 2022
+    AND apt.field_action_plan_type_value IS NOT NULL
     GROUP BY a.nid;
 
 -- informea_national_plans_title
@@ -383,7 +391,7 @@ CREATE OR REPLACE SQL SECURITY DEFINER VIEW `informea_contacts` AS
     LEFT JOIN `informea`.node__field_last_update upd ON upd.entity_id = a.nid
     INNER JOIN `informea`.node__field_treaty t ON a.nid = t.entity_id
     INNER JOIN `informea`.node treaty ON t.entity_id = treaty.nid
-    INNER JOIN `informea`.node_field_data treaty2 ON treaty.nid = treaty2.nid
+    INNER JOIN `informea`.node_field_data treaty2 ON treaty2.nid = treaty.nid
   WHERE
     a.`type` = 'contact_person'
     AND a2.status = 1
