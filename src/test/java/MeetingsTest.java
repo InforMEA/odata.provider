@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -63,6 +64,7 @@ public class MeetingsTest {
 		assertEquals("UY", row.getCountry());
 		assertEquals(new Double(23.230000000), row.getLatitude());
 		assertEquals(new Double(33.440000000), row.getLongitude());
+		assertTrue(row.getVirtual());
 
 		c = new GregorianCalendar(2016, 0, 14, 16, 26, 59);
 		assertEquals(c.getTime(), row.getUpdated());

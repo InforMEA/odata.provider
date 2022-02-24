@@ -48,6 +48,8 @@ public class Meeting {
 	private Double latitude;
 	private Double longitude;
 
+	private Boolean virtual;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated;
 
@@ -135,5 +137,13 @@ public class Meeting {
 
 	public List<MeetingDescription> getDescriptions() {
 		return descriptions;
+	}
+
+	public Boolean getVirtual() {
+		return virtual;
+	}
+
+	public void setVirtual(Boolean virtual) {
+		this.virtual = virtual;
 	}
 }

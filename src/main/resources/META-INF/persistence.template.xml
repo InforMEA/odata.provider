@@ -9,7 +9,7 @@
 		<shared-cache-mode>NONE</shared-cache-mode>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-			<property name="javax.persistence.jdbc.url" value='jdbc:mysql://localhost/informea_odata?zeroDateTimeBehavior=convertToNull&amp;sessionVariables=optimizer_search_depth=0"' />
+			<property name="javax.persistence.jdbc.url" value='jdbc:mysql://localhost/informea_odata?zeroDateTimeBehavior=convertToNull&amp;characterEncoding=UTF-8&amp;sessionVariables=optimizer_search_depth=0"' />
 			<property name="javax.persistence.jdbc.user" value="jenkins" />
 			<property name="javax.persistence.jdbc.password" value="jenkins" />
 
@@ -18,7 +18,7 @@
 			<property name="eclipselink.connection-pool.default.min" value="1" />
 			<property name="eclipselink.connection-pool.default.max" value="16" />
 			<property name="eclipselink.connection-pool.default.wait" value="1000" />
-			<property name="eclipselink.connection-pool.default.url" value="jdbc:mysql://localhost/informea_odata?zeroDateTimeBehavior=convertToNull&amp;sessionVariables=optimizer_search_depth=0" />
+			<property name="eclipselink.connection-pool.default.url" value="jdbc:mysql://localhost/informea_odata?zeroDateTimeBehavior=convertToNull&amp;characterEncoding=UTF-8&amp;sessionVariables=optimizer_search_depth=0" />
 			<!-- EclipseLink should create the database schema automatically -->
 			<!--<property name="eclipselink.ddl-generation" value="create-tables" /> -->
 			<property name="eclipselink.ddl-generation.output-mode" value="database" />
@@ -33,7 +33,7 @@
 		<shared-cache-mode>NONE</shared-cache-mode>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-			<property name="javax.persistence.jdbc.url" value='jdbc:mysql://localhost/informea_odata_test?zeroDateTimeBehavior=convertToNull&amp;sessionVariables=optimizer_search_depth=0"' />
+			<property name="javax.persistence.jdbc.url" value='jdbc:mysql://localhost/informea_odata_test?zeroDateTimeBehavior=convertToNull&amp;characterEncoding=UTF-8&amp;sessionVariables=optimizer_search_depth=0"' />
 			<property name="javax.persistence.jdbc.user" value="jenkins" />
 			<property name="javax.persistence.jdbc.password" value="jenkins" />
 
@@ -42,7 +42,7 @@
 			<property name="eclipselink.connection-pool.default.min" value="1" />
 			<property name="eclipselink.connection-pool.default.max" value="16" />
 			<property name="eclipselink.connection-pool.default.wait" value="1000" />
-			<property name="eclipselink.connection-pool.default.url" value="jdbc:mysql://localhost/informea_odata_test?zeroDateTimeBehavior=convertToNull&amp;sessionVariables=optimizer_search_depth=0" />
+			<property name="eclipselink.connection-pool.default.url" value="jdbc:mysql://localhost/informea_odata_test?zeroDateTimeBehavior=convertToNull&amp;characterEncoding=UTF-8&amp;sessionVariables=optimizer_search_depth=0" />
 			<!-- EclipseLink should create the database schema automatically -->
 			<!--<property name="eclipselink.ddl-generation" value="create-tables" /> -->
 			<property name="eclipselink.ddl-generation.output-mode" value="database" />

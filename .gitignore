@@ -2,5 +2,6 @@ target/
 WebContent/
 .DS_Store
 .idea
+src/main/resources/META-INF/persistence.xml
 nb-configuration.xml
 odata.provider.iml

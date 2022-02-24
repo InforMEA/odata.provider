@@ -347,6 +347,7 @@ CREATE TABLE `informea_meetings` (
   `country` char(2) NOT NULL DEFAULT '' COMMENT 'ISO 3166-1 code (ex. RO)',
   `latitude` decimal(12,9) DEFAULT NULL,
   `longitude` decimal(12,9) DEFAULT NULL,
+  `virtual` tinyint(1) DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date of last update. If not leave to default',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -357,8 +358,8 @@ CREATE TABLE `informea_meetings` (
 
 LOCK TABLES `informea_meetings` WRITE;
 INSERT INTO `informea_meetings` VALUES
-  ('5bdb02b0-debe-4689-852d-9d9a96fd63eb','ramsar','http://www.ramsar.org/node/39893','2012-07-05 22:00:00','2012-07-12 22:00:00',NULL,NULL,'cop',NULL,NULL,NULL,NULL,NULL,NULL,'RO',NULL,NULL,'2016-01-13 15:31:44')
- ,('af2078a9-357d-4b12-8f44-fdd1e63ea63f','ramsar','http://www.ramsar.org/node/23897','2015-05-31 22:00:00','2015-06-08 22:00:00','repetition','kind','cop','access','status','url1','copy1','Punta del Este, Uruguay','city','UY',23.230000000,33.440000000,'2016-01-14 16:26:59');
+  ('5bdb02b0-debe-4689-852d-9d9a96fd63eb','ramsar','http://www.ramsar.org/node/39893','2012-07-05 22:00:00','2012-07-12 22:00:00',NULL,NULL,'cop',NULL,NULL,NULL,NULL,NULL,NULL,'RO',NULL,NULL,0,'2016-01-13 15:31:44')
+ ,('af2078a9-357d-4b12-8f44-fdd1e63ea63f','ramsar','http://www.ramsar.org/node/23897','2015-05-31 22:00:00','2015-06-08 22:00:00','repetition','kind','cop','access','status','url1','copy1','Punta del Este, Uruguay','city','UY',23.230000000,33.440000000,1,'2016-01-14 16:26:59');
 UNLOCK TABLES;
 
 --
