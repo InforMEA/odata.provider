@@ -1,5 +1,8 @@
 package edw.olingo.model;
 
+import org.eclipse.persistence.annotations.BatchFetch;
+import org.eclipse.persistence.annotations.BatchFetchType;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,9 +57,11 @@ public class Meeting {
 	private Date updated;
 
 	@OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<MeetingDescription> descriptions = new ArrayList<MeetingDescription>();
 
 	@OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<MeetingTitle> titles = new ArrayList<MeetingTitle>();
 
 	public String getId() {

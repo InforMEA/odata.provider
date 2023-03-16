@@ -14,6 +14,9 @@
  */
 package edw.olingo.model;
 
+import org.eclipse.persistence.annotations.BatchFetch;
+import org.eclipse.persistence.annotations.BatchFetchType;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -66,21 +69,27 @@ public class Decision {
 	private Integer displayOrder;
 
 	@OneToMany(mappedBy = "decision", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<DecisionTitle> titles = new ArrayList<DecisionTitle>();
 
 	@OneToMany(mappedBy = "decision", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<DecisionLongTitle> longTitles = new ArrayList<DecisionLongTitle>();
 
 	@OneToMany(mappedBy = "decision", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<DecisionSummary> summaries = new ArrayList<DecisionSummary>();
 
 	@OneToMany(mappedBy = "decision", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<DecisionContent> contents = new ArrayList<DecisionContent>();
 
 	@OneToMany(mappedBy = "decision", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<DecisionKeyword> keywords = new ArrayList<DecisionKeyword>();
 
 	@OneToMany(mappedBy = "decision", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<DecisionFile> files = new ArrayList<DecisionFile>();
 
 	public String getLink() {

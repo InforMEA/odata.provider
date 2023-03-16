@@ -14,6 +14,9 @@
  */
 package edw.olingo.model;
 
+import org.eclipse.persistence.annotations.BatchFetch;
+import org.eclipse.persistence.annotations.BatchFetchType;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,9 +62,11 @@ public class NationalPlan {
 	private Date updated;
 
 	@OneToMany(mappedBy = "national_plan", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<NationalPlanTitle> titles;
 
 	@OneToMany(mappedBy = "national_plan", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<NationalPlanFile> files = new ArrayList<NationalPlanFile>();
 
 	public String getTreaty() {

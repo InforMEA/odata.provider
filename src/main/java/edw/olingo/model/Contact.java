@@ -14,6 +14,9 @@
  */
 package edw.olingo.model;
 
+import org.eclipse.persistence.annotations.BatchFetch;
+import org.eclipse.persistence.annotations.BatchFetchType;
+
 import java.util.Date;
 import java.util.List;
 
@@ -63,6 +66,7 @@ public class Contact {
 	private Date updated;
 
 	@OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@BatchFetch(BatchFetchType.IN)
 	private List<ContactTreaty> treaties;
 
 	public String getCountry() {

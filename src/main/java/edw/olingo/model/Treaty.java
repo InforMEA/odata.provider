@@ -1,5 +1,8 @@
 package edw.olingo.model;
 
+import org.eclipse.persistence.annotations.BatchFetch;
+import org.eclipse.persistence.annotations.BatchFetchType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +32,11 @@ public class Treaty {
 	private String officialNameEnglish;
 
 	@OneToMany(mappedBy = "treaty", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<TreatyDescription> descriptions = new ArrayList<TreatyDescription>();
 
 	@OneToMany(mappedBy = "treaty", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<TreatyTitle> titles = new ArrayList<TreatyTitle>();
 
 	public String getId() {

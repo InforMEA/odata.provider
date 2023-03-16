@@ -14,6 +14,9 @@
  */
 package edw.olingo.model;
 
+import org.eclipse.persistence.annotations.BatchFetch;
+import org.eclipse.persistence.annotations.BatchFetchType;
+
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +57,7 @@ public class Site {
 	private Double longitude;
 
 	@OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
+	@BatchFetch(BatchFetchType.IN)
 	private List<SiteName> names;
 
 	@Temporal(TemporalType.TIMESTAMP)

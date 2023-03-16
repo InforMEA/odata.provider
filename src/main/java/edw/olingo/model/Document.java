@@ -1,5 +1,8 @@
 package edw.olingo.model;
 
+import org.eclipse.persistence.annotations.BatchFetch;
+import org.eclipse.persistence.annotations.BatchFetchType;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,33 +33,43 @@ public class Document {
     private String country;
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    @BatchFetch(BatchFetchType.IN)
     private List<DocumentTreaty> treaties = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    @BatchFetch(BatchFetchType.IN)
     private List<DocumentAuthor> authors = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    @BatchFetch(BatchFetchType.IN)
     private List<DocumentDescription> descriptions = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    @BatchFetch(BatchFetchType.IN)
     private List<DocumentFile> files = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    @BatchFetch(BatchFetchType.IN)
     private List<DocumentIdentifier> identifiers = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    @BatchFetch(BatchFetchType.IN)
     private List<DocumentKeyword> keywords = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    @BatchFetch(BatchFetchType.IN)
     private List<DocumentReference> references = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    @BatchFetch(BatchFetchType.IN)
     private List<DocumentTag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    @BatchFetch(BatchFetchType.IN)
     private List<DocumentTitle> titles = new ArrayList<>();
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    @BatchFetch(BatchFetchType.IN)
     private List<DocumentType> types = new ArrayList<>();
 
 //    @ManyToOne
