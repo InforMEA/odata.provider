@@ -27,7 +27,7 @@ public class InformeaJPAExtension implements JPAEdmExtension {
 		// entities and as 1 to 1 for others.
 		// This makes olingo throw "Requested entity could not be found" errors
 		// when accessing the 1:1 entities.
-		// Workaround: if 1:1 multiplicity is found, it forces * on the child
+		// Workaround: if 1:1 multiplicity is found, it forces * on the child.
 		// Child is determined by the class prefix (the parent entity name must
 		// be a prefix of the child element entity)
 		for (Association a : jpaEdmSchemaView.getEdmSchema().getAssociations()) {

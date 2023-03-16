@@ -24,6 +24,10 @@
 			<property name="eclipselink.ddl-generation.output-mode" value="database" />
 			<property name="eclipselink.logging.level" value="INFO" />
 			<property name="eclipselink.orm.throw.exceptions" value="true" />
+<!--		For debug purposes: -->
+<!--			<property name="eclipselink.logging.level.sql" value="FINE" />-->
+<!--			<property name="eclipselink.logging.level" value="FINE" />-->
+<!--			<property name="eclipselink.logging.file" value="c:/proiecte/odata/eclipselink.log"/>-->
 		</properties>
 		<!--<exclude-unlisted-classes>false</exclude-unlisted-classes> -->
 	</persistence-unit>

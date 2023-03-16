@@ -160,6 +160,11 @@ SQLServer specific configuration:
 
 * Restart Tomcat to take effect
 
+### Limit the results (optional)
+If (for performance reasons) you need to limit the number of entities returned when no limits are set ($top / $skip limits), se the environment variable `ODATA_PAGESIZE` to the number of entities to return:
+
+`export ODATA_PAGESIZE=250`
+
 Build from source
 =================
 
@@ -177,6 +182,17 @@ To run tests:
 3. Edit the pom.xml and configure database connection in the _test database configuration_ section
 4. Execute the tests with ```mvn sql:execute test```
 
+### In case of 'An exception occurred' errors
+
+Some types of special characters (basically anything with ascii code <32 except for CR/LF/TAB) in the document names/addresses and other text fields are not supported by Olingo. In such cases, a generic 'An exception occurred' error is shown. To identify exactly the issue, you can use the `etc/functional_test.py` script to extract all entities and to check which one is faulty.
+
+To use it, set the persistence logging to log SQL in `persistence.xml`
+```
+<property name="eclipselink.logging.level.sql" value="FINE" />
+<property name="eclipselink.logging.level" value="FINE" />
+<property name="eclipselink.logging.file" value="eclipselink.log"/>
+```
+Configure the `baseurl` value in `functional_test.py` then run the script. It will connect to the application and list all entities. When it finds an error, it will check every entity to find the faulty one. Then you can look in the `eclipselink.log` for the last DB calls and identify the source record.
 
 Configuration
 =============
@@ -217,3 +233,4 @@ The current list of SQL views part of the toolkit:
 * informea_treaties
 * informea_treaties_description
 * informea_treaties_title
+

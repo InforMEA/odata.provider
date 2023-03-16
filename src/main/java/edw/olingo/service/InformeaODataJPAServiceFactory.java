@@ -11,7 +11,6 @@ public class InformeaODataJPAServiceFactory extends
 		org.apache.olingo.odata2.jpa.processor.api.ODataJPAServiceFactory {
 
 	private static final String PUNIT_NAME = "persistence_unit";
-	// private static final int PAGE_SIZE = 100;
 
 	@Override
 	public ODataJPAContext initializeODataJPAContext()
@@ -23,7 +22,17 @@ public class InformeaODataJPAServiceFactory extends
 		oDataJPAContext.setEntityManagerFactory(JPAEntityManagerFactory
 				.getEntityManagerFactory(PUNIT_NAME));
 		oDataJPAContext.setPersistenceUnitName(PUNIT_NAME);
-		// oDataJPAContext.setPageSize(PAGE_SIZE);
+		String pageSize = System.getenv("ODATA_PAGESIZE");
+		if(pageSize != null) {
+			try {
+				int pageSizeInt = Integer.parseInt(pageSize);
+				if(pageSizeInt > 0) {
+					oDataJPAContext.setPageSize(pageSizeInt);
+				}
+			} catch (Exception e){
+				// don't set
+			}
+		}
 		// oDataJPAContext.setDefaultNaming(true);
 		setDetailErrors(true);
 		oDataJPAContext.setJPAEdmExtension(new InformeaJPAExtension());

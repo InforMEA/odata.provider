@@ -23,9 +23,9 @@
 	</repositories>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.cxf>2.7.6</version.cxf>
-		<version.olingo>2.0.5</version.olingo>
-		<version.eclipselink>2.5.1</version.eclipselink>
+		<version.cxf>2.7.18</version.cxf>
+		<version.olingo>2.0.12</version.olingo>
+		<version.eclipselink>2.5.2</version.eclipselink>
 		<version.javax.persistence>2.0.5</version.javax.persistence>
 	</properties>
 
@@ -109,20 +109,20 @@
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.5</version>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.32</version>
 		</dependency>
 
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.6</version>
+			<version>5.1.49</version>
 		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 
