@@ -211,7 +211,8 @@ CREATE OR REPLACE TABLE `informea_decisions_keywords` AS
     t1.name AS term
   FROM `informea_decisions` a
     INNER JOIN `informea_prod`.node__field_informea_tags c ON a.nid = c.entity_id
-    INNER JOIN `informea_prod`.taxonomy_term_field_data t1 ON c.field_informea_tags_target_id = t1.tid;
+    INNER JOIN `informea_prod`.taxonomy_term_field_data t1 ON c.field_informea_tags_target_id = t1.tid
+    WHERE t1.langcode = 'en';
 
 -- informea_decisions_longtitle
 CREATE OR REPLACE TABLE `informea_decisions_longtitle` AS
@@ -345,7 +346,7 @@ CREATE OR REPLACE TABLE `informea_national_plans_title` AS
 -- informea_national_plans_documents
 CREATE OR REPLACE TABLE `informea_national_plans_documents` AS
   SELECT
-    CONCAT(a.id, '-', fm.uuid)  AS id,
+    CONCAT(a.id, '-', fm.uuid, '-', f.delta)  AS id,
     a.id AS national_plan_id,
     fm.uri AS diskPath,
     IF (f.field_files_description = '', CONCAT('https://www.informea.org/sites/default/files/', REPLACE(fm.uri, 'public://', '')), f.field_files_description) AS url,
@@ -581,7 +582,7 @@ CREATE OR REPLACE TABLE `informea_documents_identifiers` AS
 -- Documents `files` navigation property
 CREATE OR REPLACE TABLE `informea_documents_files` AS
   SELECT
-    CONCAT(a.nid, '-', d.langcode) AS id,
+    CONCAT(a.nid, '-', d.langcode, '-', d.delta) AS id,
     a.id AS document_id,
     CONCAT('http://www.informea.org/sites/default/files/', REPLACE(fm.uri, 'public://', '')) AS url,
     NULL AS content,
@@ -626,3 +627,148 @@ CREATE OR REPLACE TABLE `informea_documents_treaties` AS
     INNER JOIN `informea_prod`.node__field_treaty t ON t.entity_id = a.nid
     INNER JOIN `informea_prod`.node__field_odata_identifier o ON o.entity_id = t.field_treaty_target_id
   GROUP BY a.nid, t.field_treaty_target_id;
+
+ALTER TABLE informea.informea_meetings_title
+    ADD INDEX idx_imt_mid (meeting_id);
+ALTER TABLE informea.informea_meetings_description
+    ADD INDEX idx_imd_mid (meeting_id);
+
+ALTER TABLE informea.informea_contacts_treaties
+    ADD INDEX idx_ict_cid (contact_id);
+
+ALTER TABLE informea.informea_national_plans_title
+    ADD INDEX idx_inpt_npid (national_plan_id);
+ALTER TABLE informea.informea_national_plans_documents
+    ADD INDEX idx_inpd_npid (national_plan_id);
+
+ALTER TABLE informea.informea_documents_authors
+    ADD INDEX idx_ida_did (document_id);
+ALTER TABLE informea.informea_documents_description
+    ADD INDEX idx_idd_did (document_id);
+ALTER TABLE informea.informea_documents_files
+    ADD INDEX idx_idf_did (document_id);
+ALTER TABLE informea.informea_documents_identifiers
+    ADD INDEX idx_idi_did (document_id);
+ALTER TABLE informea.informea_documents_keywords
+    ADD INDEX idx_idk_did (document_id);
+ALTER TABLE informea.informea_documents_references
+    ADD INDEX idx_idr_did (document_id);
+ALTER TABLE informea.informea_documents_tags
+    ADD INDEX idx_idta_did (document_id);
+ALTER TABLE informea.informea_documents_title
+    ADD INDEX idx_idti_did (document_id);
+ALTER TABLE informea.informea_documents_treaties
+    ADD INDEX idx_idtr_did (document_id);
+ALTER TABLE informea.informea_documents_types
+    ADD INDEX idx_idty_did (document_id);
+
+
+ALTER TABLE informea.informea_decisions_content
+    ADD INDEX idx_idc_did (decision_id);
+ALTER TABLE informea.informea_decisions_documents
+    ADD INDEX idx_idd_did (decision_id);
+ALTER TABLE informea.informea_decisions_keywords
+    ADD INDEX idx_idk_did (decision_id);
+ALTER TABLE informea.informea_decisions_longtitle
+    ADD INDEX idx_idl_did (decision_id);
+ALTER TABLE informea.informea_decisions_summary
+    ADD INDEX idx_ids_did (decision_id);
+ALTER TABLE informea.informea_decisions_title
+    ADD INDEX idx_idt_did (decision_id);
+
+
+ALTER TABLE informea.informea_country_reports_title
+    ADD INDEX idx_icrt_crid (country_report_id);
+ALTER TABLE informea.informea_country_reports_documents
+    ADD INDEX idx_icrd_crid (country_report_id);
+
+ALTER TABLE informea.informea_treaties_description
+    ADD INDEX idx_itd_tid (treaty_id);
+ALTER TABLE informea.informea_treaties_title
+    ADD INDEX idx_itd_tid (treaty_id);
+
+ALTER TABLE informea.informea_sites_name
+    ADD INDEX idx_isn_sid (site_id);
+
+
+ALTER TABLE informea.informea_contacts
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_contacts_treaties
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_country_reports
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_country_reports_documents
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_country_reports_title
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_decisions
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_decisions_content
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_decisions_documents
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_decisions_keywords
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_decisions_longtitle
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_decisions_summary
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_decisions_title
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_documents
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_documents_authors
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_documents_description
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_documents_files
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_documents_identifiers
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_documents_keywords
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_documents_references
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_documents_tags
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_documents_title
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_documents_treaties
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_documents_types
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_meetings
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_meetings_description
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_meetings_title
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_national_plans
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_national_plans_documents
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_national_plans_title
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_sites
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_sites_name
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_treaties
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_treaties_description
+    ADD UNIQUE INDEX pk_id (id);
+ALTER TABLE informea.informea_treaties_title
+    ADD UNIQUE INDEX pk_id (id);
+
+
+-- fixes for bad data
+update informea_documents_title set value=REGEXP_REPLACE(value, '\\x1E', '-') where REGEXP_REPLACE(value, '\\x1E', '-')<>value;
+update informea_documents_title set value=REGEXP_REPLACE(value, '[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]', '') where REGEXP_REPLACE(value, '[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]', '')<>value;
+
+update informea_documents_description set value=REGEXP_REPLACE(value, '\\x1E', '-') where REGEXP_REPLACE(value, '\\x1E', '-')<>value;
+update informea_documents_description set value=REGEXP_REPLACE(value, '[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]', '') where REGEXP_REPLACE(value, '[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]', '')<>value;
+
+update informea_contacts set address=REGEXP_REPLACE(address, '\\x1E', '-') where REGEXP_REPLACE(address, '\\x1E', '-')<>address;
+update informea_contacts set address=REGEXP_REPLACE(address, '[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]', '') where REGEXP_REPLACE(address, '[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]', '')<>address;
+
+commit;
