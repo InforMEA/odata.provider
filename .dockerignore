@@ -1,0 +1,12 @@
+ChangeLog
+doc/
+docker-build/
+target/
+Dockerfile
+.dockerignore
+.git/
+.gitignore
+nb-configuration.xml
+odata.provider.iml
+.settings/
+*.war

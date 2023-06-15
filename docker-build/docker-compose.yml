@@ -1,0 +1,52 @@
+version: '2.0'
+
+services:
+  mariadb:
+    image: library/mariadb:10.6
+    container_name: informea_odata_mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MARIADB_DATABASE: informea_odata_test
+      TZ: Europe/Bucharest
+    ports:
+      - 3307:3306
+    tmpfs:
+      - /var/lib/mysql
+    volumes:
+      - ../etc/test-prepare.sql:/docker-entrypoint-initdb.d/test-prepare.sql
+    networks:
+      customnetwork:
+        ipv4_address: 172.20.0.4
+
+  builder:
+    build: ../
+    container_name: informea_odata_build
+    restart: no
+    volumes: 
+      - ./.m2:/root/.m2
+      - ./target:/project/target
+    networks:
+      customnetwork:
+        ipv4_address: 172.20.0.3
+    entrypoint: "mvn package"
+    external_links:
+      - mariadb
+
+  tomcat:
+    image: tomcat:7.0
+    container_name: informea_odata
+    restart: unless-stopped
+    volumes: 
+      - ./target:/usr/local/tomcat/webapps
+    networks:
+      customnetwork:
+        ipv4_address: 172.20.0.2
+    external_links:
+      - builder
+
+networks:
+  customnetwork:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
