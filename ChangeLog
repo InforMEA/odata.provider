@@ -2,6 +2,43 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.7.0] - 2023-06-15
+- [FEATURE] - Add batch settings to all entities to make queries faster
+- [FEATURE] - Add indexing on the data tables for faster retrieval
+- [FEATURE] - New page size limit option was added
+- [BUG] - Cleanup special characters from text columns (olingo crashed when these values were exported)
+- [BUG] - Fix connection pool configuration (it was not scaling with requests)
+- [BUG] - Change data table definitions for primary keys that were not unique
+- [BUG] - Add unique indexes on data tables to enforce PK uniqueness
+- [BUG] - Change date parsing on some columns
+
+## [2.6.0] - 2022-02-24
+- [FEATURE] - Add virtual meeting field support (12507)
+- [FEATURE] - Migrate existing entitites to D9 structure
+- [BUG] - Return all documents even if they do not have a country
+
+## [2.4.5] - 2016-11-04
+- [BUG] Fix typo in identifiers names for the Document schema
+- Bugfixes
+
+## [2.4.4] - 2016-11-04
+- [BUG] Fix JPA attribute content for the Document entity
+- Bugfixes
+
+## [2.4.3] - 2016-05-16
+- [BUG] Version check HTTP connection does not follow redirects
+- [BUG] Disable JPA shared cache
+- Bugfixes
+
+## [2.4.2] - 2016-05-15
+- Bugfixes
+
+## [2.4.0] - 2016-05-15
+- [FEATURE] Add displayOrder to the decisions view
+- [FEATURE] Add all JPA-EDM mappings for document entitites
+- [FEATURE] Include the deployment guide in the repo
+- Bugfixes
+
 ## [2.3.0] - 2016-03-14
 - [FEATURE] Implemented the document schema
 
