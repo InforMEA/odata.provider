@@ -1,6 +1,6 @@
 ChangeLog
 doc/
-docker-build/
+docker-test/
 target/
 Dockerfile
 .dockerignore

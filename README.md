@@ -20,7 +20,14 @@ The 2.0 version features:
 
 ## Create new release
 
-* Refer to `docker-build` folder
+1. Update version in `pom.xml`
+2. Update version in `docker run --rm -ti --name informea_odata_build -v .:/project -v ./.m2:/root/.m2 informea_odata:latest mvn -DskipTests=true clean package` : `VERSION_MAJOR`, `VERSION_MINOR`, `VERSION_REVISION`, `VERSION_BETA`
+3. Build WAR archive file:
+
+```bash
+docker build -t informea_odata:latest .
+docker run --rm -ti --name informea_odata_build -v .:/project -v ./.m2:/root/.m2 informea_odata:latest mvn -DskipTests=true clean package
+```
 
 ## Binary installation
 
